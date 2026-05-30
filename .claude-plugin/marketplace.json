@@ -1,0 +1,17 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "claude-living-docs",
+  "description": "A marketplace for living-docs: commands that scaffold and grow AI-optimized project documentation.",
+  "owner": {
+    "name": "Raihan",
+    "email": "raihankusuma5@gmail.com"
+  },
+  "plugins": [
+    {
+      "name": "living-docs",
+      "description": "Scaffold (/project-init) and adopt-or-upgrade (/project-adopt) a documentation system that grows with your codebase and survives context compaction.",
+      "source": "./plugins/living-docs",
+      "category": "documentation"
+    }
+  ]
+}
