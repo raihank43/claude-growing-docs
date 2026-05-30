@@ -51,6 +51,8 @@ Rebuild `CLAUDE.md` from the scaffold template, then **re-inject the project-spe
 - The `Remote:` line value
 - Any bespoke sections the user added that aren't in the template — keep them; never drop user-authored content.
 
+If the project's CLAUDE.md has itself grown **fat** (deep knowledge inline that now duplicates `docs/`), offer the same consolidation choice described in **Phase 4.5** — (A) merge / (B) consolidate, B recommended — using the same move → verify → remove safety.
+
 ## U3: Patch the docs (additive only — never overwrite filled content)
 - `docs/PLAN.md`: if the **Project Phase** marker is missing, add it at the top. Set it to `BUILDING` for an active project (only `BRAINSTORMING` if the project is clearly still pre-build). Do NOT touch the Vision/Features/Decisions content.
 - `docs/_feature-template.md`: add it if missing (copy from scaffold).
@@ -87,7 +89,7 @@ Copy from `${CLAUDE_PLUGIN_ROOT}/project-scaffold/`, but **preserve what already
 - **`docs/PLAN.md`, `docs/RULES.md`, `docs/_feature-template.md`** — copy in (these rarely pre-exist).
 - **`docs/ARCHITECTURE.md`** — copy in; you'll fill it in Phase 4.
 - **`README.md`** — if one already exists, **do NOT overwrite it.** Keep theirs. In "Map existing docs" / "Full scan" modes you'll fold its content into our structure and refine it; in Barebones, leave it alone except for a Tech Stack section if missing. Only drop in the template README if there is no README at all.
-- **`CLAUDE.md`** — if one already exists, **merge**: keep their project-specific instructions, add our workflow/artifact-index sections. Otherwise copy the template.
+- **`CLAUDE.md`** — if one already exists, **don't overwrite it yet.** A *lean* existing CLAUDE.md (basically just a short workflow) can be merged with our workflow/artifact-index now. But if it's a **fat, knowledge-heavy CLAUDE.md** (architecture, gotchas, data shapes, procedures inline), leave it untouched for now — **Phase 4.5** decides how to handle it *after* the scan has extracted that knowledge into `docs/`. If there's no CLAUDE.md at all, copy the template.
 - **`.gitignore`** — if one exists, append any missing secret patterns (`.env`, `.env.*`, credentials, keys); don't overwrite. If none, create one for the stack.
 
 Fill `{Project Name}` / `{project-name}` / `{One-line description}` placeholders from what you detected. **Set the `Project Phase` marker in PLAN.md to `BUILDING`** — this is an existing, working project, not one being brainstormed from scratch.
@@ -115,6 +117,26 @@ Fill `{Project Name}` / `{project-name}` / `{One-line description}` placeholders
 
 In all modes, when something is uncertain, mark it `{To be confirmed}` rather than guessing. **Code is the source of truth** — if you later find a doc contradicts the code, fix the doc.
 
+## Phase 4.5: Consolidate an Existing Fat CLAUDE.md
+
+Runs only in **Map existing docs** / **Full scan** modes, and only when the repo already had a substantial CLAUDE.md — roughly >80 lines, or one carrying sections that now overlap what you just extracted into `docs/` (architecture, gotchas, data shapes, per-feature detail, a procedural workflow).
+
+**The trap:** the additive-merge instinct ("never clobber") leaves that knowledge **inline in CLAUDE.md AND duplicated in `docs/`**, plus two competing workflow sections — the exact bloated all-in-one CLAUDE.md this system exists to cure. CLAUDE.md should be the lean **system prompt**: a short summary + ONE workflow + the artifact index/map, short enough to re-read fully after compaction. Deep knowledge belongs in `docs/`.
+
+So **pause and ask the user** (AskUserQuestion). Present both options every time — the user keeps the choice — but mark B **(Recommended)** when the file is fat:
+
+- **(A) Conservative merge** — keep all of CLAUDE.md's content, just add the growing-docs workflow + artifact index. Zero risk of loss, but knowledge stays duplicated between CLAUDE.md and `docs/`.
+- **(B) Consolidate (Recommended for a fat CLAUDE.md)** — slim CLAUDE.md to {summary + one unified workflow + artifact index + pointers into `docs/`}. The deep sections move out to `docs/`, where the scan already put them. Content is *relocated, not lost*.
+
+If the existing CLAUDE.md is already lean, skip the question and just merge.
+
+### If the user picks (B), consolidate safely:
+
+1. **Move → verify → remove.** For each deep section you intend to cut (architecture, gotchas, data shapes, per-feature implementation, debugging), first confirm that content actually exists in the matching `docs/` file. If something in CLAUDE.md is **not** yet in `docs/`, move it there *first*, then remove it from CLAUDE.md. Never delete knowledge that has no home.
+2. **Unify the workflows.** If CLAUDE.md had its own procedural workflow, merge it INTO the single growing-docs workflow — never leave two. Crucially, **absorb the project-specific procedure** (build/release commands, versioning rules, commit-message style, environment gotchas, pre-compaction sweeps). Those are gold and the generic template lacks them; they stay in CLAUDE.md (they're how-to-work, part of the system prompt) — just not duplicated.
+3. **Result:** CLAUDE.md = project summary + one workflow (carrying the project's real procedure) + artifact index pointing into `docs/`. Everything else lives in `docs/`.
+4. **Commit the consolidation as its own step** so it's trivially reversible, and report what moved where.
+
 ## Phase 5: Git & Wrap-Up
 
 1. If already a git repo: just stage the new docs and commit `docs: adopt AI documentation system ({depth} scan)`. Never re-init or rewrite history.
@@ -128,7 +150,7 @@ Then tell the user the system is live:
 
 ## Important Notes
 
-- **Never clobber the user's existing files.** README, CLAUDE.md, .gitignore — merge or preserve, never blind-overwrite.
+- **Never clobber the user's existing files.** README, CLAUDE.md, .gitignore — merge or preserve, never blind-overwrite. The one *sanctioned* exception is a consolidation the user explicitly chose in Phase 4.5 — and even then, only move → verify → remove (relocate knowledge into `docs/`, never delete it).
 - **Respect the token budget.** The whole point of the tiers is cost control. Don't escalate to a deeper scan than the user picked.
 - **Existing project = `BUILDING` phase**, not brainstorming. Don't run the pitch/brainstorm flow unless the user explicitly wants to plan a new direction.
 - **Gotchas first.** When scanning code, the most valuable thing to capture is what's surprising or fragile — that's what saves future-you after compaction.
