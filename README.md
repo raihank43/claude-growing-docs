@@ -39,13 +39,18 @@ Run it from inside a repo. It either:
 ## Install
 
 ```
-/plugin marketplace add <your-github-username>/claude-living-docs
+/plugin marketplace add raihank43/claude-living-docs
 /plugin install living-docs
 ```
 
 Then `/project-init` and `/project-adopt` are available in any conversation.
 
-> Replace `<your-github-username>` with wherever this repo lives. You can also test locally before publishing:
+To update later, pull the newest version:
+```
+/plugin marketplace update claude-living-docs
+```
+
+> You can also run it from a local clone instead of GitHub:
 > ```
 > /plugin marketplace add /absolute/path/to/claude-living-docs
 > ```
