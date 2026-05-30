@@ -1,5 +1,7 @@
 # {Feature Name}
 
+_Last updated: {date or short commit SHA} — recency signal, not a correctness guarantee. If the code has moved past this, trust the code._
+
 ## Description
 What it does and why it exists.
 

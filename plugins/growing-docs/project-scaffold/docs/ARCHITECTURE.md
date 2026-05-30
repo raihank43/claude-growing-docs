@@ -1,5 +1,7 @@
 # Architecture
 
+_Last updated: {date or short commit SHA} — recency signal, not a correctness guarantee. The folder tree and data flow below rot fastest; if they disagree with the repo, trust the repo._
+
 ## Tech Stack
 
 | Layer | Technology | Why |

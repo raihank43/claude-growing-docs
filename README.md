@@ -13,6 +13,18 @@ When you build a project in one long conversation with an AI agent, two things h
 
 `growing-docs` fixes this by giving the project a set of documents the agent reads before every task and updates after every change. The docs are the agent's long-term memory.
 
+### What makes it different
+
+Most "AI memory" setups record **decisions** — but an agent can usually re-derive *what* to do from the code. The expensive thing that vanishes in compaction is **why a path was abandoned**. That's what makes an agent confidently re-suggest the idea you shot down an hour ago.
+
+So growing-docs treats the negative space as first-class:
+
+- **Rejected Ideas** (`PLAN.md`) — what you considered and decided *not* to do, and why.
+- **Anti-Patterns** (`RULES.md`) — what was tried, broke, and shouldn't be repeated — with the failure reason.
+- **Gotchas** (every feature doc) — the edge cases and "looks right but isn't" traps.
+
+Recording the dead ends is the difference between docs that *describe* the project and docs that stop the agent from repeating your mistakes.
+
 ## What you get
 
 | File | Purpose |

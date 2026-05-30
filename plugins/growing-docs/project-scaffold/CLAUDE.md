@@ -1,8 +1,10 @@
 # {Project Name}
 
-## Workflow — Follow This For EVERY User Request
+## Workflow — Follow This For Every Change
 
-This workflow applies to EVERY request the user makes — a major feature, a one-line fix, a small addition, a refactor, a bug fix. There is no request too small to skip this sequence. The size of the change does not matter; what matters is that docs stay in sync with code.
+This workflow applies to every request that **changes the project** — a major feature, a one-line fix, a small addition, a refactor, a bug fix. Size doesn't matter: if it alters behavior, structure, or conventions, the full sequence runs. There is no change too small to skip it.
+
+**Carve-out:** read-only requests — explaining code, answering "what does this do?", exploring without touching anything — skip the checklist. This applies to *changes*, not *conversations*. Rule of thumb: if you created or modified a file, the workflow applies.
 
 ### Step 1: Read Before You Work
 1. Read this file fully
@@ -16,7 +18,7 @@ This workflow applies to EVERY request the user makes — a major feature, a one
 - Follow all conventions in `/docs/RULES.md`
 - Follow the architecture patterns in `/docs/ARCHITECTURE.md`
 - If you discover a gotcha, edge case, or non-obvious behavior — write it down immediately in the relevant feature doc before you forget
-- **Code is the source of truth.** If a doc contradicts what the code actually does, the code wins — fix the doc as part of your change. Stale docs that lie are worse than no docs.
+- **Code is the source of truth.** If a doc contradicts what the code actually does, the code wins — fix the doc as part of your change. Stale docs that lie are worse than no docs. If two docs disagree with *each other*, precedence runs: code → the relevant `feature-*.md` → `ARCHITECTURE.md` / `PLAN.md` → `README.md`. Reconcile toward the higher-precedence source.
 
 ### Step 3: Update Documentation (BEFORE committing)
 After the code change is done, go through this checklist and **decide** for each item whether it needs updating. Don't skip the decision — actively consider each one:
@@ -29,6 +31,8 @@ After the code change is done, go through this checklist and **decide** for each
 
 Not every item needs updating every time. But you must **consider** every item every time. The decision to NOT update a doc should be conscious, not accidental.
 
+When you update a doc that carries a `Last updated:` line (feature docs, ARCHITECTURE.md), refresh it to today's date or the current short commit SHA. It's a **recency signal** so a future session can gauge staleness at a glance — *not* a correctness guarantee. If the code has moved past that point, trust the code.
+
 ### Step 4: Verify It Works
 Before committing, confirm the change actually works — don't commit blind. Run the app or the relevant tests if they exist; if there's nothing runnable yet, at least sanity-check that what you wrote is coherent. Committing often is meant to capture a clean history of *working* states, not a log of broken ones.
 
@@ -39,7 +43,7 @@ Before committing, confirm the change actually works — don't commit blind. Run
 - **Push only if a remote is configured.** If this is local-only git, commit locally and skip the push — don't error out pushing to a remote that doesn't exist.
 
 ### When Adding a New Feature
-Copy `docs/_feature-template.md` to `docs/feature-{feature-name}.md`, fill it in, and add a row to the Features table in `docs/PLAN.md` pointing to it.
+First check the Features table in `docs/PLAN.md` — if a doc for this feature already exists, update that one instead of creating a near-duplicate (don't end up with both `feature-auth.md` and `feature-authentication.md`). Otherwise, copy `docs/_feature-template.md` to `docs/feature-{feature-name}.md`, fill it in, set its `Last updated:` line, and add a row to the Features table pointing to it.
 
 ### When Modifying an Existing Feature
 - Read its doc first
@@ -48,13 +52,12 @@ Copy `docs/_feature-template.md` to `docs/feature-{feature-name}.md`, fill it in
 - Update the changelog
 
 ### When You Learn Something Cross-Cutting
-If you discover information that applies globally (not specific to one feature), write it to memory so it persists across conversations:
-- User preferences and working style
-- Cross-cutting patterns or conventions
-- External system references
-- Feedback on what approaches work or don't work
+Cross-cutting knowledge has two homes — pick the right one:
 
-Create focused, small memory files — one per topic, not one giant file.
+- **About the *project's code*** — a convention, a pattern, or an anti-pattern that spans features → write it to **`docs/RULES.md`**. It's project knowledge: it belongs in the repo and is committed with everything else.
+- **About the *user or how you work together*** — their preferences, working style, an external system they use, feedback on what does/doesn't land → write it to **Claude Code memory** (the user-level store *outside* the repo), so it persists across every project, not just this one. Keep memory files small and focused — one topic each.
+
+Rule of thumb: if it would help anyone working on *this repo*, it's `RULES.md`. If it only makes sense because it's *this user*, it's memory.
 
 ## Git Convention
 
