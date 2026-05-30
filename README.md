@@ -1,4 +1,4 @@
-# living-docs
+# growing-docs
 
 > Documentation that scaffolds itself, grows with your codebase, and survives context compaction.
 
@@ -11,7 +11,7 @@ When you build a project in one long conversation with an AI agent, two things h
 1. **Context compaction** eventually drops details — gotchas, decisions, conventions, half-finished plans.
 2. The agent **re-invents bad approaches** and **re-suggests rejected ideas** because the reasons they were dropped vanished with the context.
 
-`living-docs` fixes this by giving the project a set of documents the agent reads before every task and updates after every change. The docs are the agent's long-term memory.
+`growing-docs` fixes this by giving the project a set of documents the agent reads before every task and updates after every change. The docs are the agent's long-term memory.
 
 ## What you get
 
@@ -34,30 +34,30 @@ Pitch-first. Describe your idea (you don't even need a name — it'll suggest on
 ### `/project-adopt` — existing codebase
 Run it from inside a repo. It either:
 - **Adopts** an un-instrumented project — you choose how deeply to scan (barebones / map existing docs / full scan), so it never burns tokens crawling a huge repo you didn't ask it to.
-- **Upgrades** a project already using living-docs to the latest templates — without touching your filled-in content.
+- **Upgrades** a project already using growing-docs to the latest templates — without touching your filled-in content.
 
 ## Install
 
 ```
-/plugin marketplace add raihank43/claude-living-docs
-/plugin install living-docs
+/plugin marketplace add raihank43/claude-growing-docs
+/plugin install growing-docs
 ```
 
 Then `/project-init` and `/project-adopt` are available in any conversation.
 
 To update later, pull the newest version:
 ```
-/plugin marketplace update claude-living-docs
+/plugin marketplace update claude-growing-docs
 ```
 
 > You can also run it from a local clone instead of GitHub:
 > ```
-> /plugin marketplace add /absolute/path/to/claude-living-docs
+> /plugin marketplace add /absolute/path/to/claude-growing-docs
 > ```
 
 ## How it stays consistent
 
-Both commands copy from one shared template source (`plugins/living-docs/project-scaffold/`), referenced via `${CLAUDE_PLUGIN_ROOT}` so it resolves correctly on any machine. Editing a template once updates what both commands produce.
+Both commands copy from one shared template source (`plugins/growing-docs/project-scaffold/`), referenced via `${CLAUDE_PLUGIN_ROOT}` so it resolves correctly on any machine. Editing a template once updates what both commands produce.
 
 ## License
 
