@@ -44,9 +44,10 @@ The core idea: the agent **decides** after every request — large or small — 
 Pitch-first. Describe your idea (you don't even need a name — it'll suggest one), and it scaffolds the docs, initializes git, then brainstorms the plan *with* you, filling in the docs as you talk. It handles the "I started Claude from my home directory" case by telling you exactly how to relocate without losing anything.
 
 ### `/project-adopt` — existing codebase
-Run it from inside a repo. It either:
-- **Adopts** an un-instrumented project — you choose how deeply to scan (barebones / map existing docs / full scan), so it never burns tokens crawling a huge repo you didn't ask it to.
-- **Upgrades** a project already using growing-docs to the latest templates — without touching your filled-in content.
+Run it from inside a repo. It can:
+- **Adopt** an un-instrumented project — you choose how deeply to scan (barebones / map existing docs / full scan), so it never burns tokens crawling a huge repo you didn't ask it to.
+- **Upgrade** a project already using growing-docs to the latest templates — without touching your filled-in content.
+- **Consolidate a fat existing CLAUDE.md** — if a project crammed everything (architecture, gotchas, procedures) into one giant CLAUDE.md, adopt offers to move that knowledge into `docs/` and slim CLAUDE.md back to a lean workflow + index. Your choice (it can also just merge), and nothing is lost — content is relocated, then verified, before anything is removed.
 
 ## Install
 
