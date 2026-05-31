@@ -59,6 +59,9 @@ Cross-cutting knowledge has two homes — pick the right one:
 
 Rule of thumb: if it would help anyone working on *this repo*, it's `RULES.md`. If it only makes sense because it's *this user*, it's memory.
 
+### Checkpoints
+At natural save points — a feature landed, before a break, or before the conversation gets large enough that you'll want to start fresh — run `/checkpoint`. It sweeps the docs against the code *and* this conversation, captures anything discussed-but-unwritten (decisions, gotchas, rejected ideas), refreshes the `Last updated:` markers, and writes a Current Focus handoff note. It's the deliberate, lossless alternative to waiting for auto-compaction: checkpoint, then start a fresh chat that inherits everything through the docs.
+
 ## Git Convention
 
 Commit after every meaningful, **verified** change — never let working code accumulate uncommitted. Push too, *if a remote is configured*; otherwise local commits are fine. Never commit secrets (`.env`, credentials, keys) — keep them gitignored.

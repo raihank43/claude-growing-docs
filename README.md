@@ -2,7 +2,7 @@
 
 > Documentation that scaffolds itself, grows with your codebase, and survives context compaction.
 
-A Claude Code plugin with two slash commands for projects you build *with* an AI agent over long, single-conversation sessions. It sets up a documentation system the agent maintains automatically — so when the conversation gets compacted and the agent loses context, the knowledge is already written down where it can be re-read.
+A Claude Code plugin with three slash commands for projects you build *with* an AI agent over long, single-conversation sessions. It sets up a documentation system the agent maintains automatically — so when the conversation gets compacted and the agent loses context, the knowledge is already written down where it can be re-read.
 
 ## The problem it solves
 
@@ -48,6 +48,9 @@ Run it from inside a repo. It can:
 - **Adopt** an un-instrumented project — you choose how deeply to scan (barebones / map existing docs / full scan), so it never burns tokens crawling a huge repo you didn't ask it to.
 - **Upgrade** a project already using growing-docs to the latest templates — without touching your filled-in content.
 - **Consolidate a fat existing CLAUDE.md** — if a project crammed everything (architecture, gotchas, procedures) into one giant CLAUDE.md, adopt offers to move that knowledge into `docs/` and slim CLAUDE.md back to a lean workflow + index. Your choice (it can also just merge), and nothing is lost — content is relocated, then verified, before anything is removed.
+
+### `/checkpoint` — mid-session save-and-sync
+Run it at a save point: a feature landed, you're taking a break, or the conversation has gotten big and you want to start a fresh one. It reconciles the docs against **both the code and the current conversation** — capturing decisions, gotchas, and rejected ideas that were only ever *discussed* — refreshes the staleness markers, and writes a "Current Focus" handoff note. The deliberate, lossless alternative to waiting for auto-compaction: checkpoint, then start a fresh chat that inherits everything through the docs. Commits following the project's own git/release convention.
 
 ## Install
 

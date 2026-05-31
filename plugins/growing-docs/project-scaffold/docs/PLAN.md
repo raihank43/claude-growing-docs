@@ -8,6 +8,15 @@
 >
 > Flip this to `BUILDING` once the user confirms the roadmap is solid enough to start building.
 
+## Current Focus
+
+> Where development is right now — so a fresh session (or a post-compaction one) can resume without the old conversation. Kept current by `/checkpoint`.
+
+_Last checkpoint: none yet_
+
+- **In progress:** {nothing yet — set when work starts}
+- **Next:** {nothing yet}
+
 ## Vision
 
 {To be filled during brainstorming — the big picture of what we're building and why.}
