@@ -139,6 +139,8 @@ If the existing CLAUDE.md is already lean, skip the question and just merge.
 
 ## Phase 5: Git & Wrap-Up
 
+**Privacy check (before committing).** The docs you just generated are derived from the conversation + a code scan, which can surface things that don't belong in a public repo. Check if the repo is public: `git remote -v` (no remote → local-only, skip) and, if there's a GitHub remote and `gh` is available, `gh repo view --json visibility -q .visibility`. If it's public — or a remote exists and visibility is unknown — scan the docs about to be committed for private / cross-project content: **other project names, internal URLs/hostnames, credentials, personal details**. If you find any, **STOP and ask** (AskUserQuestion): (A) sanitize/genericize, (B) keep these docs local-only (gitignore `/CLAUDE.md` + `/docs/`, root-anchored so product/templates stay tracked), or (C) proceed as-is. Never silently commit private context to a public repo.
+
 1. If already a git repo: just stage the new docs and commit `docs: adopt AI documentation system ({depth} scan)`. Never re-init or rewrite history.
 2. If not a git repo: ask whether to `git init` (offer it; some existing folders aren't yet under git).
 3. Ensure secrets are gitignored before staging.

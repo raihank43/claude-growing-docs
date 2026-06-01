@@ -45,6 +45,9 @@ Update the **Current Focus** section in `docs/PLAN.md` (add it if missing) so a 
 Keep it short — it's a pointer for resuming, not a transcript.
 
 ## 5. Commit — following the project's OWN convention
+
+**Privacy check (before committing).** These docs are derived from the conversation, which can hold things that don't belong in a public repo. First check if the repo is public: `git remote -v` (no remote → local-only, skip this) and, if there's a GitHub remote and `gh` is available, `gh repo view --json visibility -q .visibility`. If it's public — or a remote exists and visibility is unknown — scan the docs you're about to commit for private / cross-project content: **other project names, internal URLs/hostnames, credentials, personal details**. If you find any, **STOP and ask** (AskUserQuestion): (A) sanitize/genericize it, (B) keep these docs local-only (gitignore `/CLAUDE.md` + `/docs/`, root-anchored so product code/templates stay tracked), or (C) proceed as-is. Never silently commit private context to a public repo.
+
 - Read CLAUDE.md's **Git Convention** / release section. If the project mandates a release path (e.g. a publish script, or an explicit "never hand-run git commit"), **follow it** — don't bypass it. Otherwise commit directly.
 - Message: `docs: checkpoint — sync docs with code + conversation ({one line of what drifted})`.
 - Record the checkpoint point: update (or add) the `Last checkpoint: <sha>` line in `docs/PLAN.md` to the HEAD you reconciled to.
