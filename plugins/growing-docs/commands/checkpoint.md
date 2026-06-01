@@ -14,7 +14,7 @@ A deliberate doc-reconciliation sweep you invoke by hand. The per-change workflo
 This command reconciles docs but **never changes code**. If the repo has no `CLAUDE.md` / `docs/` (not a growing-docs project yet), tell the user to run `/project-adopt` first.
 
 ## 1. Establish scope — what's happened since the last checkpoint
-- Read `docs/PLAN.md`. If it has a `Last checkpoint: <sha>` line, scope = `git diff <sha>..HEAD` + uncommitted changes. If not, this is the first checkpoint — scope = recent history (`git log --oneline -20`) + the working tree.
+- Read `docs/PLAN.md`. If it has a `Last checkpoint: <sha>` line, **first confirm that SHA is still in the branch** (`git merge-base --is-ancestor <sha> HEAD`). If it is, scope = `git diff <sha>..HEAD` + uncommitted changes. If it is **not** an ancestor (history was rewritten / force-pushed since the last checkpoint, so the baseline is orphaned), or there's no marker at all, treat this as a first checkpoint and rebaseline: scope = recent history (`git log --oneline -20`) + the working tree.
 - Run `git status` and `git diff` to see the actual code changes you'll be reconciling.
 
 ## 2. Reconcile docs against BOTH the code and the conversation
@@ -49,6 +49,7 @@ Keep it short — it's a pointer for resuming, not a transcript.
 **Privacy check (before committing).** These docs are derived from the conversation, which can hold things that don't belong in a public repo. First check if the repo is public: `git remote -v` (no remote → local-only, skip this) and, if there's a GitHub remote and `gh` is available, `gh repo view --json visibility -q .visibility`. If it's public — or a remote exists and visibility is unknown — scan the docs you're about to commit for private / cross-project content: **other project names, internal URLs/hostnames, credentials, personal details**. If you find any, **STOP and ask** (AskUserQuestion): (A) sanitize/genericize it, (B) keep these docs local-only (gitignore `/CLAUDE.md` + `/docs/`, root-anchored so product code/templates stay tracked), or (C) proceed as-is. Never silently commit private context to a public repo.
 
 - Read CLAUDE.md's **Git Convention** / release section. If the project mandates a release path (e.g. a publish script, or an explicit "never hand-run git commit"), **follow it** — don't bypass it. Otherwise commit directly.
+- **If the dev docs are gitignored / local-only** (some public repos keep their own docs untracked), the updates just stay on disk — there's nothing to commit for them; only commit *tracked* changes. Still update the marker in the local `docs/PLAN.md`.
 - Message: `docs: checkpoint — sync docs with code + conversation ({one line of what drifted})`.
 - Record the checkpoint point: update (or add) the `Last checkpoint: <sha>` line in `docs/PLAN.md` to the HEAD you reconciled to.
 

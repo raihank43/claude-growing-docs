@@ -1,7 +1,7 @@
 {
   "name": "growing-docs",
   "description": "Slash commands that scaffold and continuously grow AI-optimized project documentation (CLAUDE.md + docs/) designed to survive long conversations and context compaction.",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "author": {
     "name": "Raihan",
     "email": "raihankusuma5@gmail.com"
