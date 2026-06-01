@@ -6,3 +6,9 @@ Thumbs.db
 .vscode/
 .idea/
 *.swp
+
+# This repo is PUBLIC. Its own dev docs (synced from dev chats) can reference
+# private projects, so they're kept local-only. Root-anchored so the PRODUCT
+# templates under plugins/growing-docs/project-scaffold/ stay tracked.
+/CLAUDE.md
+/docs/
