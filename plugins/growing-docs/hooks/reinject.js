@@ -1,0 +1,127 @@
+#!/usr/bin/env node
+/**
+ * growing-docs — SessionStart(compact) re-inject hook   [EXPERIMENT]
+ *
+ * Fires AFTER Claude Code compacts a session (auto or manual). Re-injects the
+ * project's NEGATIVE SPACE — docs/PLAN.md's Rejected Ideas + Decisions — as
+ * `additionalContext`, so the post-compaction agent doesn't re-suggest ideas
+ * already ruled out or re-litigate settled decisions.
+ *
+ * Why ONLY the negative space, and why so small (learned from a live test, 2026-06-02):
+ *   - CLAUDE.md is RELOADED NATIVELY post-compaction (it shows up as a memory
+ *     file in /context), so re-injecting it is redundant — dropped.
+ *   - Claude Code offloads any hook output over ~2KB to disk, leaving only a
+ *     ~2KB inline preview. The v1.6.0 payload was ~16KB, so its valuable part
+ *     (Rejected Ideas) got paged OUT of context. So we keep the payload UNDER
+ *     ~2KB to stay inline, and inject only the one thing CLAUDE.md and the
+ *     native compaction summary don't reliably carry: the rejected/decided
+ *     "negative space", front-loaded so a trim keeps the most valuable rows.
+ *
+ * It only re-serves what is already on disk; it captures nothing. /checkpoint
+ * is still what writes current knowledge there.
+ *
+ * Constraints (see docs/RULES.md "Zero-dependency product"):
+ *   - OPT-IN: no-ops unless env GROWING_DOCS_REINJECT is truthy.
+ *   - SELF-GUARDING: no-ops unless cwd has CLAUDE.md (a growing-docs project).
+ *   - FAIL-SAFE: any error → emit nothing, exit 0. Never disrupt a session.
+ *   - ZERO npm deps: Node stdlib only.
+ */
+
+'use strict';
+
+const fs = require('fs');
+const path = require('path');
+
+// Stay under Claude Code's ~2KB inline-preview threshold so the payload lands
+// IN context instead of being offloaded to disk.
+const INLINE_CHAR_BUDGET = 1900;
+const TRIM_NOTE = '\n…[trimmed to stay inline — read docs/PLAN.md for the rest]';
+
+function isTruthy(v) {
+  return v != null && !['', '0', 'false', 'off', 'no'].includes(String(v).trim().toLowerCase());
+}
+
+function readIfExists(p) {
+  try {
+    return fs.readFileSync(p, 'utf8');
+  } catch {
+    return null;
+  }
+}
+
+/** Emit the optional context as a SessionStart hook result, then exit cleanly. */
+function emit(additionalContext) {
+  if (additionalContext) {
+    process.stdout.write(
+      JSON.stringify({
+        hookSpecificOutput: {
+          hookEventName: 'SessionStart',
+          additionalContext,
+        },
+      })
+    );
+  }
+  process.exit(0);
+}
+
+/** Bodies of the `## ` sections whose title matches each pattern, in pattern order. */
+function extractSections(planText, patterns) {
+  const sections = [];
+  let cur = null;
+  for (const line of planText.split(/\r?\n/)) {
+    const m = /^##\s+(.+?)\s*$/.exec(line);
+    if (m) {
+      cur = { title: m[1], lines: [line] };
+      sections.push(cur);
+    } else if (cur) {
+      cur.lines.push(line);
+    }
+  }
+  const out = [];
+  for (const pat of patterns) {
+    const sec = sections.find((s) => pat.test(s.title));
+    if (sec) out.push(sec.lines.join('\n').trim());
+  }
+  return out;
+}
+
+try {
+  // 1. Opt-in gate.
+  if (!isTruthy(process.env.GROWING_DOCS_REINJECT)) emit(null);
+
+  // 2. Resolve the project dir from the hook payload (fallback: process.cwd()).
+  let cwd = process.cwd();
+  try {
+    const input = JSON.parse(fs.readFileSync(0, 'utf8') || '{}');
+    if (input && typeof input.cwd === 'string' && input.cwd) cwd = input.cwd;
+  } catch {
+    /* no stdin / not JSON — fall back to process.cwd() */
+  }
+
+  // 3. Self-guard: only act in a growing-docs project. (CLAUDE.md is the marker;
+  //    we do NOT inject it — Claude Code reloads it natively as a memory file.)
+  if (!readIfExists(path.join(cwd, 'CLAUDE.md'))) emit(null);
+
+  const plan = readIfExists(path.join(cwd, 'docs', 'PLAN.md'));
+  if (!plan) emit(null);
+
+  // 4. Rejected Ideas first (the crown jewel), then Decisions.
+  const sections = extractSections(plan, [/reject/i, /decision/i]);
+  if (!sections.length) emit(null);
+
+  const preamble =
+    '# Re-injected after compaction (growing-docs)\n' +
+    "Durable negative space your CLAUDE.md doesn't carry (CLAUDE.md is reloaded " +
+    'natively). Do NOT re-propose anything listed as Rejected, or re-litigate a ' +
+    'settled Decision, without checking docs/PLAN.md first.';
+
+  let out = preamble + '\n\n' + sections.join('\n\n');
+  if (out.length > INLINE_CHAR_BUDGET) {
+    out = out.slice(0, INLINE_CHAR_BUDGET - TRIM_NOTE.length).trimEnd() + TRIM_NOTE;
+  }
+
+  emit(out);
+} catch {
+  // Never break a session because re-inject failed.
+  process.exit(0);
+}
