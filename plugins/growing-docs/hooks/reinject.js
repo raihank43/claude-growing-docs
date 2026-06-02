@@ -85,6 +85,20 @@ function extractSections(planText, patterns) {
   return out;
 }
 
+/**
+ * Strip a section's explanatory prose: keep the heading, then jump to the first
+ * table or list line onward. Spends the ~2KB budget on real rejected/decided
+ * entries instead of template boilerplate ("Record ideas we considered…"). If a
+ * section has no table/list, it's kept whole (the prose IS the content).
+ */
+function trimSection(sectionText) {
+  const lines = sectionText.split('\n');
+  const isContent = (l) => /^\s*\|/.test(l) || /^\s*[-*]\s/.test(l) || /^\s*\d+\.\s/.test(l);
+  const idx = lines.findIndex((l, i) => i > 0 && isContent(l));
+  if (idx === -1) return sectionText;
+  return [lines[0], ...lines.slice(idx)].join('\n').trim();
+}
+
 try {
   // 1. Opt-in gate.
   if (!isTruthy(process.env.GROWING_DOCS_REINJECT)) emit(null);
@@ -105,8 +119,8 @@ try {
   const plan = readIfExists(path.join(cwd, 'docs', 'PLAN.md'));
   if (!plan) emit(null);
 
-  // 4. Rejected Ideas first (the crown jewel), then Decisions.
-  const sections = extractSections(plan, [/reject/i, /decision/i]);
+  // 4. Rejected Ideas first (the crown jewel), then Decisions; drop boilerplate.
+  const sections = extractSections(plan, [/reject/i, /decision/i]).map(trimSection);
   if (!sections.length) emit(null);
 
   const preamble =
