@@ -46,7 +46,7 @@ Pitch-first. Describe your idea (you don't even need a name — it'll suggest on
 ### `/project-adopt` — existing codebase
 Run it from inside a repo. It can:
 - **Adopt** an un-instrumented project — you choose how deeply to scan (barebones / map existing docs / full scan), so it never burns tokens crawling a huge repo you didn't ask it to.
-- **Upgrade** a project already using growing-docs to the latest templates — without touching your filled-in content.
+- **Upgrade** a project already using growing-docs to the latest templates — without touching your filled-in content. (A version stamp in the scaffolded `CLAUDE.md` tells it exactly which template generation you're on, so up-to-date projects are detected instantly.)
 - **Consolidate a fat existing CLAUDE.md** — if a project crammed everything (architecture, gotchas, procedures) into one giant CLAUDE.md, adopt offers to move that knowledge into `docs/` and slim CLAUDE.md back to a lean workflow + index. Your choice (it can also just merge), and nothing is lost — content is relocated, then verified, before anything is removed.
 
 ### `/checkpoint` — mid-session save-and-sync
@@ -59,7 +59,7 @@ Run it at a save point: a feature landed, you're taking a break, or the conversa
 /plugin install growing-docs
 ```
 
-Then `/project-init` and `/project-adopt` are available in any conversation.
+Then `/project-init`, `/project-adopt`, and `/checkpoint` are available in any conversation.
 
 To update later, pull the newest version:
 ```

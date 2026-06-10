@@ -16,6 +16,9 @@
  *     ~2KB to stay inline, and inject only the one thing CLAUDE.md and the
  *     native compaction summary don't reliably carry: the rejected/decided
  *     "negative space", front-loaded so a trim keeps the most valuable rows.
+ *   - When a section is too big for the budget, drop its OLDEST rows (v1.8.0):
+ *     entries are appended chronologically, so the newest rows — the ones the
+ *     just-compacted conversation was most likely circling — sit at the BOTTOM.
  *
  * It only re-serves what is already on disk; it captures nothing. /checkpoint
  * is still what writes current knowledge there.
@@ -36,6 +39,7 @@ const path = require('path');
 // IN context instead of being offloaded to disk.
 const INLINE_CHAR_BUDGET = 1900;
 const TRIM_NOTE = '\n…[trimmed to stay inline — read docs/PLAN.md for the rest]';
+const ROW_TRIM_NOTE = '_(older rows trimmed to fit — full table in docs/PLAN.md)_';
 
 function isTruthy(v) {
   return v != null && !['', '0', 'false', 'off', 'no'].includes(String(v).trim().toLowerCase());
@@ -99,6 +103,39 @@ function trimSection(sectionText) {
   return [lines[0], ...lines.slice(idx)].join('\n').trim();
 }
 
+/**
+ * Fit a section into `budget` chars by dropping its OLDEST rows. Entries are
+ * appended chronologically, so the newest rows — the ones the just-compacted
+ * conversation was most likely circling, i.e. the most at risk of being
+ * re-suggested — sit at the BOTTOM; a head-slice would keep the stale early
+ * rows and drop the live ones. Keeps the heading (plus a table's header and
+ * separator rows), then as many trailing rows as fit, preserving their order.
+ * Returns null if not even one row fits.
+ */
+function fitSection(sectionText, budget) {
+  if (sectionText.length <= budget) return sectionText;
+  const lines = sectionText.split('\n');
+  // Head = the `## ` heading, plus the header + separator rows when the
+  // content is a markdown table.
+  let headEnd = 1;
+  if (lines.length > 2 && /^\s*\|/.test(lines[1]) && /^\s*\|[\s:|-]+\|?\s*$/.test(lines[2])) {
+    headEnd = 3;
+  }
+  const head = lines.slice(0, headEnd).join('\n');
+  const rows = lines.slice(headEnd).filter((l) => l.trim() !== '');
+
+  let used = head.length + 1 + ROW_TRIM_NOTE.length + 1;
+  const kept = [];
+  for (let i = rows.length - 1; i >= 0; i--) {
+    if (used + rows[i].length + 1 > budget) break;
+    used += rows[i].length + 1;
+    kept.unshift(rows[i]);
+  }
+  if (!kept.length) return null;
+  const note = kept.length < rows.length ? [ROW_TRIM_NOTE] : [];
+  return [head, ...kept, ...note].join('\n');
+}
+
 try {
   // 1. Opt-in gate.
   if (!isTruthy(process.env.GROWING_DOCS_REINJECT)) emit(null);
@@ -129,7 +166,21 @@ try {
     'natively). Do NOT re-propose anything listed as Rejected, or re-litigate a ' +
     'settled Decision, without checking docs/PLAN.md first.';
 
-  let out = preamble + '\n\n' + sections.join('\n\n');
+  // 5. Assemble within the inline budget. Priority order: Rejected Ideas gets
+  //    the budget first, Decisions takes what's left — and when a section is
+  //    too big, fitSection keeps its NEWEST rows, not its oldest.
+  const parts = [preamble];
+  let remaining = INLINE_CHAR_BUDGET - preamble.length;
+  for (const sec of sections) {
+    const fitted = fitSection(sec, remaining - 2); // 2 = the '\n\n' joiner
+    if (!fitted) continue;
+    parts.push(fitted);
+    remaining -= fitted.length + 2;
+  }
+  if (parts.length === 1) emit(null);
+
+  let out = parts.join('\n\n');
+  // Last resort — fitSection should keep us under, but never risk the offload.
   if (out.length > INLINE_CHAR_BUDGET) {
     out = out.slice(0, INLINE_CHAR_BUDGET - TRIM_NOTE.length).trimEnd() + TRIM_NOTE;
   }

@@ -42,6 +42,7 @@ Keep Phase 1 short. Its only goals are a rough idea, an agreed name, and a folde
    - `{Project Name}` → the actual project name (in CLAUDE.md, README.md)
    - `{project-name}` → the folder name (in ARCHITECTURE.md folder tree)
    - `{One-line description}` → the one-line description (in README.md)
+   - `{growing-docs-version}` → the installed plugin version, read from the `version` field of `${CLAUDE_PLUGIN_ROOT}/.claude-plugin/plugin.json` (in CLAUDE.md's stamp comment — it lets a future `/project-adopt` see which template generation the project has; never guess or hardcode it)
 
 Do NOT over-fill. Wrong guesses are worse than empty sections — the templates stay mostly empty until brainstorming fills them.
 

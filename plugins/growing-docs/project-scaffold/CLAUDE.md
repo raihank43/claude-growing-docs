@@ -1,3 +1,4 @@
+<!-- growing-docs template v{growing-docs-version} — stamped at scaffold/upgrade time; /project-adopt reads this to upgrade precisely. Keep this line. -->
 # {Project Name}
 
 ## Workflow — Follow This For Every Change

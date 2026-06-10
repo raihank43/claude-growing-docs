@@ -20,7 +20,7 @@ Phase 1 detects which case you're in. Run this **from inside the repo root** —
 Quickly detect, without reading everything:
 - **Stack**: look for `package.json`, `pyproject.toml`, `Cargo.toml`, `go.mod`, `pom.xml`, `composer.json`, etc.
 - **Git**: is this already a git repo? (`git status`) Never re-init or clobber existing history.
-- **Already adopted?** This is the key branch. The repo is **already adopted** if it has a `CLAUDE.md` containing our workflow (look for a "Project Artifacts Index" section or the Step/Workflow structure) AND/OR a `docs/` folder with `PLAN.md` + `RULES.md` in our format.
+- **Already adopted?** This is the key branch. The surest sign is the `<!-- growing-docs template vX.Y.Z -->` stamp comment at the top of `CLAUDE.md` — but projects adopted before v1.8.0 predate the stamp, so its *absence* proves nothing. Without a stamp, the repo is **already adopted** if it has a `CLAUDE.md` containing our workflow (look for a "Project Artifacts Index" section or the Step/Workflow structure) AND/OR a `docs/` folder with `PLAN.md` + `RULES.md` in our format.
   - **If already adopted → go to the Upgrade Mode section below.** Skip Phases 2-5.
   - **If not adopted → continue to Phase 2** (fresh adoption).
 - **Existing docs** (for fresh adoption): `README.md`, `/docs`, `CONTRIBUTING.md`, wikis, ADRs.
@@ -35,6 +35,9 @@ Report a one-paragraph summary of what you found, and state which case you detec
 Goal: bring the existing docs up to the latest templates **without losing any project-specific content**. The user's filled-in knowledge is sacred; only the *structure/boilerplate* gets refreshed.
 
 ## U1: Diff against the latest templates
+
+**Check the version stamp first.** Read the `<!-- growing-docs template vX.Y.Z -->` comment at the top of the project's `CLAUDE.md` and compare it to the current plugin version (the `version` field of `${CLAUDE_PLUGIN_ROOT}/.claude-plugin/plugin.json`). If they **match**, the docs are already on the latest templates — report that and stop; there is nothing to upgrade. If the stamp is **older or missing** (pre-v1.8.0 adoptions have none), continue below.
+
 Read the project's `CLAUDE.md` and the scaffold's `CLAUDE.md`. Identify which current-template sections/rules are missing or outdated in the project's version. Common drift to check for:
 - `Project Phase` marker awareness in Step 1 (and the marker itself at the top of `docs/PLAN.md`)
 - "EVERY user request" framing + the explicit **decide-checklist** in Step 3 (old versions used weaker "Before/After Any Task" wording)
@@ -46,6 +49,7 @@ Read the project's `CLAUDE.md` and the scaffold's `CLAUDE.md`. Identify which cu
 
 ## U2: Upgrade CLAUDE.md (regenerate structure, preserve specifics)
 Rebuild `CLAUDE.md` from the scaffold template, then **re-inject the project-specific bits** from the old version:
+- Fill `{growing-docs-version}` in the stamp comment with the current plugin version (from `${CLAUDE_PLUGIN_ROOT}/.claude-plugin/plugin.json`) — the refreshed stamp is what marks the upgrade as done.
 - The project title (`# {Project Name}`)
 - Project-specific git **scopes and commit examples** (e.g. this project's `api`/`download`/`cli` scopes)
 - The `Remote:` line value
@@ -92,7 +96,7 @@ Copy from `${CLAUDE_PLUGIN_ROOT}/project-scaffold/`, but **preserve what already
 - **`CLAUDE.md`** — if one already exists, **don't overwrite it yet.** A *lean* existing CLAUDE.md (basically just a short workflow) can be merged with our workflow/artifact-index now. But if it's a **fat, knowledge-heavy CLAUDE.md** (architecture, gotchas, data shapes, procedures inline), leave it untouched for now — **Phase 4.5** decides how to handle it *after* the scan has extracted that knowledge into `docs/`. If there's no CLAUDE.md at all, copy the template.
 - **`.gitignore`** — if one exists, append any missing secret patterns (`.env`, `.env.*`, credentials, keys); don't overwrite. If none, create one for the stack.
 
-Fill `{Project Name}` / `{project-name}` / `{One-line description}` placeholders from what you detected. **Set the `Project Phase` marker in PLAN.md to `BUILDING`** — this is an existing, working project, not one being brainstormed from scratch.
+Fill `{Project Name}` / `{project-name}` / `{One-line description}` placeholders from what you detected, and `{growing-docs-version}` from the `version` field of `${CLAUDE_PLUGIN_ROOT}/.claude-plugin/plugin.json`. If you merged the workflow into an *existing* CLAUDE.md instead of copying the template, still add the stamp comment line at the top — it's how a future `/project-adopt` detects adoption and upgrades precisely. **Set the `Project Phase` marker in PLAN.md to `BUILDING`** — this is an existing, working project, not one being brainstormed from scratch.
 
 ## Phase 4: Backfill Docs According to Chosen Depth
 
