@@ -1,21 +1,22 @@
 # growing-docs
 
-> Documentation that scaffolds itself, grows with your codebase, and survives context compaction.
+> Project memory for agentic development — documentation that scaffolds itself, grows with your codebase, and outlives any single conversation.
 
-A Claude Code plugin with three slash commands for projects you build *with* an AI agent over long, single-conversation sessions. It sets up a documentation system the agent maintains automatically — so when the conversation gets compacted and the agent loses context, the knowledge is already written down where it can be re-read.
+A Claude Code plugin with three slash commands for projects you build *with* an AI agent. It sets up a documentation system the agent maintains automatically — durable, repo-versioned project memory, so no single conversation is ever load-bearing. End a session, compact it, start a fresh one, or hand off to a subagent or a teammate: the knowledge is already written down where the next reader picks it up.
 
 ## The problem it solves
 
-When you build a project in one long conversation with an AI agent, two things happen:
+Conversations are disposable; the knowledge inside them isn't. When you build with an AI agent, that knowledge keeps dying in predictable ways:
 
-1. **Context compaction** eventually drops details — gotchas, decisions, conventions, half-finished plans.
-2. The agent **re-invents bad approaches** and **re-suggests rejected ideas** because the reasons they were dropped vanished with the context.
+1. **A fresh session starts from zero** — decisions, gotchas, conventions, and where-you-left-off don't carry over.
+2. **Context compaction** drops details mid-conversation — and a subagent or teammate never had them to begin with.
+3. The agent **re-invents bad approaches** and **re-suggests rejected ideas**, because the reasons they were ruled out lived only in a conversation that's gone.
 
-`growing-docs` fixes this by giving the project a set of documents the agent reads before every task and updates after every change. The docs are the agent's long-term memory.
+`growing-docs` fixes this by giving the project a set of documents the agent reads before every task and updates after every change. They live in the repo — versioned, reviewable, shared — so every session, agent, and human cold-starts from the same knowledge. The docs are the project's long-term memory.
 
 ### What makes it different
 
-Most "AI memory" setups record **decisions** — but an agent can usually re-derive *what* to do from the code. The expensive thing that vanishes in compaction is **why a path was abandoned**. That's what makes an agent confidently re-suggest the idea you shot down an hour ago.
+Most "AI memory" setups record **decisions** — but an agent can usually re-derive *what* to do from the code. The expensive thing that vanishes with a conversation is **why a path was abandoned**. That's what makes an agent confidently re-suggest the idea you shot down an hour ago.
 
 So growing-docs treats the negative space as first-class:
 
