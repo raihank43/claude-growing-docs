@@ -11,8 +11,9 @@ This workflow applies to every request that **changes the project** — a major 
 2. Open `/docs/PLAN.md` and check the **Project Phase** marker at the top FIRST:
    - If `BRAINSTORMING`, the roadmap isn't settled yet — help the user flesh out the vision and features before writing code. Don't jump straight into building.
    - If `BUILDING`, proceed normally.
-3. Use PLAN.md's **Features table as your map**: find the feature you're about to touch and open the doc in its `Doc` column. The table is the index — don't go globbing blindly through `/docs/`.
-4. Check `/docs/RULES.md` for conventions to follow
+3. Read **Current Focus** (top of PLAN.md) — the cold-start brief of where things left off (just-shipped / in-flight / next). If it has a **Start here** line, read those docs first; they're the ones relevant to resuming. This is your fastest path back into context — read them, not the whole `/docs/` tree.
+4. Use PLAN.md's **Features table as your map**: find the feature you're about to touch and open the doc in its `Doc` column. The table is the index — don't go globbing blindly through `/docs/`.
+5. Check `/docs/RULES.md` for conventions to follow
 
 ### Step 2: Do The Work
 - Follow all conventions in `/docs/RULES.md`

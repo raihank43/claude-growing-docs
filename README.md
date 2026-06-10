@@ -75,6 +75,18 @@ To update later, pull the newest version:
 
 Both commands copy from one shared template source (`plugins/growing-docs/project-scaffold/`), referenced via `${CLAUDE_PLUGIN_ROOT}` so it resolves correctly on any machine. Editing a template once updates what both commands produce.
 
+## Experimental: post-compaction re-inject (opt-in)
+
+A `SessionStart` hook (`plugins/growing-docs/hooks/`) that fires **after a context compaction** and re-injects your `PLAN.md` **Rejected Ideas + Decisions** — the "negative space" — back into the model's context, so a compacted-but-still-going session doesn't re-suggest ideas you already ruled out. It's the complement to `/checkpoint`: checkpoint writes knowledge to disk; this reads it back after a compaction.
+
+**Status: experimental, off by default.** It does nothing unless you opt in, and only inside a growing-docs project. Enable it in your `~/.claude/settings.json`:
+
+```json
+{ "env": { "GROWING_DOCS_REINJECT": "1" } }
+```
+
+Honest caveats: it's most useful if you **stay in one long conversation and compact in place** rather than running `/checkpoint` + starting a fresh session (still the cleaner, more token-efficient path). The payload is capped under ~2KB so it lands inline, and it deliberately does **not** re-inject `CLAUDE.md` (Claude Code reloads that natively). Its value across repeated compactions is still being evaluated.
+
 ## License
 
 MIT — see [LICENSE](LICENSE).

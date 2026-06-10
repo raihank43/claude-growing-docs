@@ -37,12 +37,14 @@ This is the core. There are two sources of truth-that-isn't-written-down:
 ## 3. Refresh staleness markers
 Update the `Last updated:` line on every doc you touched (today's date + the current short commit SHA).
 
-## 4. Write the handoff note
-Update the **Current Focus** section in `docs/PLAN.md` (add it if missing) so a fresh session can resume without the old conversation:
-- **In progress:** what's mid-flight right now, plus any state a new session would need to know.
-- **Next:** the immediate next steps.
+## 4. Write the handoff note — the cold-start brief
+Update the **Current Focus** section in `docs/PLAN.md` (add it if missing) to a tight brief so a fresh session can resume *without re-reading everything*. Write it once here — it's the SAME content you'll report in chat (Step 6):
+- **Just shipped:** the last milestone that landed.
+- **In flight:** anything half-done a new session would need to know — or "nothing — clean stopping point."
+- **Next:** the immediate next step.
+- **Start here:** the 1–3 docs/files relevant to "Next" — so the next session reads *those*, not all of `docs/`.
 
-Keep it short — it's a pointer for resuming, not a transcript.
+Keep it tight — a pointer for resuming, not a transcript. The **Start here** line is what keeps the next session token-efficient: it reads the named docs instead of crawling the whole `docs/` tree to figure out what's relevant.
 
 ## 5. Commit — following the project's OWN convention
 
@@ -57,7 +59,7 @@ Keep it short — it's a pointer for resuming, not a transcript.
 Concisely tell the user:
 - What was already in sync vs. what had drifted and got fixed.
 - What you captured from the conversation that wasn't written down anywhere.
-- The new checkpoint SHA and the Current Focus handoff.
+- The new checkpoint SHA, and the **Current Focus brief you just wrote** (Step 4) — that same cold-start brief is what the next session resumes from, so what you report here and what's in PLAN are one and the same.
 - If they checkpointed in order to start fresh: confirm it's safe now — everything important is in the docs, so a new conversation will inherit the full picture.
 
 ## Notes

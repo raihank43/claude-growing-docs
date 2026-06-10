@@ -10,12 +10,14 @@
 
 ## Current Focus
 
-> Where development is right now — so a fresh session (or a post-compaction one) can resume without the old conversation. Kept current by `/checkpoint`.
+> The 30-second cold-start brief — so a fresh session (or a post-compaction one) can resume *without re-reading everything*. Kept current by `/checkpoint`. **Read this first**, then read only the docs the "Start here" line points to.
 
 _Last checkpoint: none yet_
 
-- **In progress:** {nothing yet — set when work starts}
-- **Next:** {nothing yet}
+- **Just shipped:** {the last milestone — set when work lands}
+- **In flight:** {anything half-done a new session must know — or "nothing — clean stopping point"}
+- **Next:** {the immediate next step}
+- **Start here:** {1–3 docs/files relevant to "Next" — so the next session reads those, not all of docs/}
 
 ## Vision
 
