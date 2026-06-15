@@ -1,5 +1,6 @@
 ---
 description: Manual save-and-verify sweep — reconcile the docs with the actual code AND the current conversation, capture anything discussed-but-not-written (decisions, gotchas, rejected ideas), refresh staleness markers, and leave a handoff note. Run at save points or before starting a fresh conversation. For growing-docs projects.
+model: claude-sonnet-4-6
 ---
 
 # Checkpoint
