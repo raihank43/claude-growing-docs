@@ -50,6 +50,9 @@ Run it from inside a repo. It can:
 - **Upgrade** a project already using growing-docs to the latest templates — without touching your filled-in content. (A version stamp in the scaffolded `CLAUDE.md` tells it exactly which template generation you're on, so up-to-date projects are detected instantly.)
 - **Consolidate a fat existing CLAUDE.md** — if a project crammed everything (architecture, gotchas, procedures) into one giant CLAUDE.md, adopt offers to move that knowledge into `docs/` and slim CLAUDE.md back to a lean workflow + index. Your choice (it can also just merge), and nothing is lost — content is relocated, then verified, before anything is removed.
 
+### `/rethink` — challenge the project and propose something better
+The divergent counterpart to `/forge`. Point it at your project (or a specific area) and it takes a fresh, critical look — reasoning from your *documented intent*, not just the code — and proposes ways to build it better: where an implementation under-serves its stated goal, where the architecture deserves a rethink, even where a previously-rejected idea is worth reopening because a new model changes the calculus. **Read-and-propose, never auto-refactor:** it writes a tiered, impact-ranked proposal doc and discusses it; accepted proposals graduate into the plan and hand off to `/forge`, rejected ones are logged so a future run treats them as settled. Its best moment is right after a sharper model lands — let it see what the last one couldn't.
+
 ### `/forge` — interview a fuzzy idea into a decided design
 Before building a feature that's still vague — a one-line backlog entry, competing approaches, an open UX choice — run `/forge` (or accept it when offered). It's a relentless, one-question-at-a-time design interview: it reads your existing docs for context (cross-checking the new feature against what already exists and what you've already rejected), recommends an answer to every question, builds a throwaway HTML prototype for UI/UX choices, and drives the design to a decision. The result lands in the feature doc as a **decided design with its rejected alternatives**, committed — so when you build (even in a fresh chat), the *why* is already on disk. Produces a design, never code.
 
@@ -63,7 +66,7 @@ Run it at a save point: a feature landed, you're taking a break, or the conversa
 /plugin install growing-docs
 ```
 
-Then `/project-init`, `/project-adopt`, `/forge`, and `/checkpoint` are available in any conversation.
+Then `/project-init`, `/project-adopt`, `/forge`, `/rethink`, and `/checkpoint` are available in any conversation.
 
 To update later, pull the newest version:
 ```

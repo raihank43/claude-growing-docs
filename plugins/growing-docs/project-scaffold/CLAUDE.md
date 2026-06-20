@@ -91,6 +91,7 @@ Remote: {to be configured}
 | `docs/RULES.md` | Code conventions, naming rules, anti-patterns |
 | `docs/_feature-template.md` | Template to copy when documenting a new feature |
 | `docs/feature-*.md` | Per-feature documentation (created as features are built) |
+| `docs/proposals/` | `/rethink` output — dated proposal files (created on demand) |
 
 ## Complex Decisions
 
