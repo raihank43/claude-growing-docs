@@ -104,11 +104,13 @@ As the user brainstorms:
 - Record rejected ideas in the PLAN.md rejected ideas table
 - Commit progress periodically: `docs: capture brainstorming — {summary}`
 
+**Escalating to grill-mode (a focused interview).** The default brainstorm above is user-led — let them talk. But when a specific feature or decision needs to be *pinned down* (competing approaches, an open UX choice, unresolved dependencies), offer to switch into a focused, one-question-at-a-time design interview — the same technique as the `/forge` command (recommend an answer each, explore-instead-of-ask, UI choices via a throwaway gitignored `scratch/*.html` prototype). Drive the fuzzy area to a decided design, then capture it in the docs. Offer it; don't impose it.
+
 **When the user confirms the roadmap is solid enough to start building, flip `Project Phase` in PLAN.md from `BRAINSTORMING` to `BUILDING` and commit.** From that point the normal build workflow in CLAUDE.md takes over.
 
 ## Important Notes
 
 - **Don't over-fill templates.** Leave sections as `{To be filled}` if they haven't been discussed yet. Wrong guesses are worse than empty sections.
-- **The user drives the brainstorming.** Don't rapid-fire questions. Let them talk, then organize what they said.
+- **The user drives the brainstorming.** Don't rapid-fire questions. Let them talk, then organize what they said — *unless* they opt into grill-mode (Phase 5), where a focused one-at-a-time interview is the whole point.
 - **Commit the brainstorming output.** When brainstorming reaches a natural pause, commit the filled-in docs.
 - **This is the start of an ongoing system.** Every feature built after this should get its own doc. Every convention discovered should go in RULES.md. The docs grow with the project — they're never "done."

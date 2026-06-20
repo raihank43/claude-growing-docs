@@ -50,6 +50,9 @@ Run it from inside a repo. It can:
 - **Upgrade** a project already using growing-docs to the latest templates — without touching your filled-in content. (A version stamp in the scaffolded `CLAUDE.md` tells it exactly which template generation you're on, so up-to-date projects are detected instantly.)
 - **Consolidate a fat existing CLAUDE.md** — if a project crammed everything (architecture, gotchas, procedures) into one giant CLAUDE.md, adopt offers to move that knowledge into `docs/` and slim CLAUDE.md back to a lean workflow + index. Your choice (it can also just merge), and nothing is lost — content is relocated, then verified, before anything is removed.
 
+### `/forge` — interview a fuzzy idea into a decided design
+Before building a feature that's still vague — a one-line backlog entry, competing approaches, an open UX choice — run `/forge` (or accept it when offered). It's a relentless, one-question-at-a-time design interview: it reads your existing docs for context (cross-checking the new feature against what already exists and what you've already rejected), recommends an answer to every question, builds a throwaway HTML prototype for UI/UX choices, and drives the design to a decision. The result lands in the feature doc as a **decided design with its rejected alternatives**, committed — so when you build (even in a fresh chat), the *why* is already on disk. Produces a design, never code.
+
 ### `/checkpoint` — mid-session save-and-sync
 Run it at a save point: a feature landed, you're taking a break, or the conversation has gotten big and you want to start a fresh one. It reconciles the docs against **both the code and the current conversation** — capturing decisions, gotchas, and rejected ideas that were only ever *discussed* — refreshes the staleness markers, and writes a "Current Focus" handoff note. The deliberate, lossless alternative to waiting for auto-compaction: checkpoint, then start a fresh chat that inherits everything through the docs. Commits following the project's own git/release convention. Runs on a cheaper model (Sonnet) — it's a focused, repo-grounded sweep, and it executes inline so it still sees your full conversation, keeping a checkpoint cheap even from a large chat.
 
@@ -60,7 +63,7 @@ Run it at a save point: a feature landed, you're taking a break, or the conversa
 /plugin install growing-docs
 ```
 
-Then `/project-init`, `/project-adopt`, and `/checkpoint` are available in any conversation.
+Then `/project-init`, `/project-adopt`, `/forge`, and `/checkpoint` are available in any conversation.
 
 To update later, pull the newest version:
 ```

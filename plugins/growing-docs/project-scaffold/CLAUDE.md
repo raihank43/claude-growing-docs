@@ -45,6 +45,8 @@ Before committing, confirm the change actually works — don't commit blind. Run
 - **Push only if a remote is configured.** If this is local-only git, commit locally and skip the push — don't error out pushing to a remote that doesn't exist.
 
 ### When Adding a New Feature
+**If the feature lacks a decided design** — it's a one-line backlog entry with no doc, has more than one viable approach or an open UX choice, overlaps an existing feature, or revisits a rejected idea — **offer to `/forge` it first.** Forge is a relentless, one-question-at-a-time design interview that produces the decided design (with rejected alternatives) before any code. Offer when there's *real* ambiguity; skip it for mechanical or fully-specified changes, and never force it. Then build from the result.
+
 First check the Features table in `docs/PLAN.md` — if a doc for this feature already exists, update that one instead of creating a near-duplicate (don't end up with both `feature-auth.md` and `feature-authentication.md`). Otherwise, copy `docs/_feature-template.md` to `docs/feature-{feature-name}.md`, fill it in, set its `Last updated:` line, and add a row to the Features table pointing to it.
 
 ### When Modifying an Existing Feature
