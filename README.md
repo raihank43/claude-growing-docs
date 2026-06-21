@@ -2,7 +2,7 @@
 
 > Project memory for agentic development — documentation that scaffolds itself, grows with your codebase, and outlives any single conversation.
 
-A Claude Code plugin with three slash commands for projects you build *with* an AI agent. It sets up a documentation system the agent maintains automatically — durable, repo-versioned project memory, so no single conversation is ever load-bearing. End a session, compact it, start a fresh one, or hand off to a subagent or a teammate: the knowledge is already written down where the next reader picks it up.
+A Claude Code plugin with five slash commands for projects you build *with* an AI agent. It sets up a documentation system the agent maintains automatically — durable, repo-versioned project memory, so no single conversation is ever load-bearing. End a session, compact it, start a fresh one, or hand off to a subagent or a teammate: the knowledge is already written down where the next reader picks it up.
 
 ## The problem it solves
 
@@ -80,7 +80,7 @@ To update later, pull the newest version:
 
 ## How it stays consistent
 
-Both commands copy from one shared template source (`plugins/growing-docs/project-scaffold/`), referenced via `${CLAUDE_PLUGIN_ROOT}` so it resolves correctly on any machine. Editing a template once updates what both commands produce.
+Both scaffolding commands (`/project-init` and `/project-adopt`) copy from one shared template source (`plugins/growing-docs/project-scaffold/`), referenced via `${CLAUDE_PLUGIN_ROOT}` so it resolves correctly on any machine. Editing a template once updates what both produce.
 
 ## Experimental: post-compaction re-inject (opt-in)
 
