@@ -1,6 +1,6 @@
 # growing-docs
 
-> Project memory for agentic development — documentation that scaffolds itself, grows with your codebase, and outlives any single conversation.
+> Project memory for agentic development — docs that scaffold themselves, grow with your codebase, and become a substrate the agent puts to work building a better project.
 
 A Claude Code plugin with five slash commands for projects you build *with* an AI agent. It sets up a documentation system the agent maintains automatically — durable, repo-versioned project memory, so no single conversation is ever load-bearing. End a session, compact it, start a fresh one, or hand off to a subagent or a teammate: the knowledge is already written down where the next reader picks it up.
 
