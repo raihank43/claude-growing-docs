@@ -38,14 +38,11 @@ Goal: bring the existing docs up to the latest templates **without losing any pr
 
 **Check the version stamp first.** Read the `<!-- growing-docs template vX.Y.Z -->` comment at the top of the project's `CLAUDE.md` and compare it to the current plugin version (the `version` field of `${CLAUDE_PLUGIN_ROOT}/.claude-plugin/plugin.json`). If they **match**, the docs are already on the latest templates — report that and stop; there is nothing to upgrade. If the stamp is **older or missing** (pre-v1.8.0 adoptions have none), continue below.
 
-Read the project's `CLAUDE.md` and the scaffold's `CLAUDE.md`. Identify which current-template sections/rules are missing or outdated in the project's version. Common drift to check for:
-- `Project Phase` marker awareness in Step 1 (and the marker itself at the top of `docs/PLAN.md`)
-- "EVERY user request" framing + the explicit **decide-checklist** in Step 3 (old versions used weaker "Before/After Any Task" wording)
-- **Verify-before-commit** step
-- **Conditional push** + **never-commit-secrets** rules
-- **"Code is the source of truth"** doc-rot rule
-- **PLAN-table-as-index** instruction in Step 1
-- Feature template as the `docs/_feature-template.md` file (old versions embedded it inline)
+**Then compute the drift LIVE — never from memory.** The shipped scaffold at `${CLAUDE_PLUGIN_ROOT}/project-scaffold/` **is** the definition of "latest." Do not work from a remembered list of template features — any such list (including one written into this command) goes stale as the templates evolve. Walk the scaffold against the project, section by section:
+- **`project-scaffold/CLAUDE.md` vs the project's `CLAUDE.md`:** for every template-owned section and rule (the workflow steps and their wording, the read-only carve-out, When Adding a New Feature / offer-to-forge, Checkpoints, Complex Decisions, the git rules, the artifacts-index rows — whatever the *current* scaffold actually contains), check it's present and hasn't fallen behind the current wording. **Bespoke, user-authored sections are NOT drift** — leave them untouched.
+- **`project-scaffold/docs/*` vs the project's `docs/`:** missing files (e.g. `_feature-template.md`) and missing template scaffolding *inside* existing docs (PLAN's Phase marker, the Current Focus brief shape, the Features-table canonicity line, table intro conventions).
+
+Classic examples of drift this catches (illustrative — the scaffold walk above is the real checklist): a pre-v1.8 CLAUDE.md with no version stamp; a feature template still embedded inline instead of `docs/_feature-template.md`; a Current Focus without Start-here pointers.
 
 ## U2: Upgrade CLAUDE.md (regenerate structure, preserve specifics)
 Rebuild `CLAUDE.md` from the scaffold template, then **re-inject the project-specific bits** from the old version:
@@ -133,7 +130,7 @@ Runs only in **Map existing docs** / **Full scan** modes, and only when the repo
 So **pause and ask the user** (AskUserQuestion). Present both options every time — the user keeps the choice — but mark B **(Recommended)** when the file is fat:
 
 - **(A) Conservative merge** — keep all of CLAUDE.md's content, just add the growing-docs workflow + artifact index. Zero risk of loss, but knowledge stays duplicated between CLAUDE.md and `docs/`.
-- **(B) Consolidate (Recommended for a fat CLAUDE.md)** — slim CLAUDE.md to {summary + one unified workflow + artifact index + pointers into `docs/`}. The deep sections move out to `docs/`, where the scan already put them. Content is *relocated, not lost*.
+- **(B) Consolidate (Recommended for a fat CLAUDE.md)** — slim CLAUDE.md to **the scaffold template's shape**: every template-owned section (workflow, When-Adding-a-Feature, Checkpoints, Complex Decisions, git convention, artifact index — whatever `project-scaffold/CLAUDE.md` currently contains) carrying the project's own specifics, plus the user's bespoke sections. The deep knowledge moves out to `docs/`, where the scan already put it. Content is *relocated, not lost*.
 
 If the existing CLAUDE.md is already lean, skip the question and just merge.
 
@@ -141,7 +138,7 @@ If the existing CLAUDE.md is already lean, skip the question and just merge.
 
 1. **Move → verify → remove.** For each deep section you intend to cut (architecture, gotchas, data shapes, per-feature implementation, debugging), first confirm that content actually exists in the matching `docs/` file. If something in CLAUDE.md is **not** yet in `docs/`, move it there *first*, then remove it from CLAUDE.md. Never delete knowledge that has no home.
 2. **Unify the workflows.** If CLAUDE.md had its own procedural workflow, merge it INTO the single growing-docs workflow — never leave two. Crucially, **absorb the project-specific procedure** (build/release commands, versioning rules, commit-message style, environment gotchas, pre-compaction sweeps). Those are gold and the generic template lacks them; they stay in CLAUDE.md (they're how-to-work, part of the system prompt) — just not duplicated.
-3. **Result:** CLAUDE.md = project summary + one workflow (carrying the project's real procedure) + artifact index pointing into `docs/`. Everything else lives in `docs/`.
+3. **Verify against the shipped template, section by section.** The lean target is defined by `${CLAUDE_PLUGIN_ROOT}/project-scaffold/CLAUDE.md` — **not by a remembered summary of it**. Before finishing, walk the scaffold's sections and confirm each one survived the consolidation (with the project's specifics re-injected). A consolidation that drops a template-owned section isn't lean, it's lossy — this has happened (Complex Decisions and Checkpoints were silently dropped in a real adoption and had to be restored by hand). Result: the scaffold's sections + the project's bespoke ones; everything deep lives in `docs/`.
 4. **Commit the consolidation as its own step** so it's trivially reversible, and report what moved where.
 
 ## Phase 5: Git & Wrap-Up

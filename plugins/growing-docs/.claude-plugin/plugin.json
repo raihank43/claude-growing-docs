@@ -1,7 +1,7 @@
 {
   "name": "growing-docs",
   "description": "Slash commands that scaffold, grow, and leverage AI-optimized project documentation (CLAUDE.md + docs/) — durable project memory every fresh session, subagent, or teammate cold-starts from, then put to work building a better project. Outlives compaction and any single conversation.",
-  "version": "1.15.0",
+  "version": "1.16.0",
   "author": {
     "name": "Raihan",
     "email": "raihankusuma5@gmail.com"
