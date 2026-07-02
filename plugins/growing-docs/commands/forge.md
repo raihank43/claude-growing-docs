@@ -32,6 +32,7 @@ Walk the design tree, **resolving dependencies one at a time.** The rules:
   - *Discrete either/or fork* → `AskUserQuestion`, recommended option first.
   - *Comparing concrete textual artifacts* (two API shapes, two doc layouts) → `AskUserQuestion` with the `preview` field.
   - *UI/UX visual choice* → build a throwaway, self-contained, project-themed prototype at `scratch/<name>.html` (ensure `scratch/` is gitignored first) demonstrating the options, and let the user pick.
+  - *Empirical unknown* (feasibility, performance, does-the-API-actually-behave-that-way — a question neither the user nor the docs can answer) → offer a **spike**: a minimal, throwaway code probe that answers it before the design commits to the answer. The spike code is disposable (gitignored `scratch/` or a temporary probe — the project's call); the **finding** is the durable artifact — record GREEN/RED + what was learned in the feature doc's **Spike findings** section.
   - *Open / exploratory* (what should happen when X? success criteria?) → prose, so the user can think out loud.
 - **Cover the dimensions** the docs make answerable: purpose & scope; **overlap-check against the Features table**; **rejected-ideas check**; dependencies / ordering; edge cases & failure modes; data / state / contracts; UX (→ prototype); success criteria.
 
@@ -42,8 +43,9 @@ Walk the design tree, **resolving dependencies one at a time.** The rules:
 ## Phase 3 — Write up the decided design
 
 1. **Create or refine the feature doc.** New → copy `docs/_feature-template.md` to `docs/feature-<name>.md`. Existing → refine in place (see Edge cases).
-2. **Fill the "Decided design" section:** each choice with its **rejected alternative inline** and the reason. Mark forge-defaulted choices if the escape hatch was used. Reference any `scratch/<name>.html` prototype.
-3. **Promote knowledge:** design-level rejects stay inline in the feature doc; **project / architecture-level** rejects → PLAN's Rejected Ideas; decisions worth logging → PLAN's Decisions log. Update the Features table row / status and refresh `Last updated:` markers.
+2. **Fill the "Decided design" section:** each choice with its **rejected alternative inline** and the reason. Mark forge-defaulted choices if the escape hatch was used. Reference any `scratch/<name>.html` prototype, and record any spike's outcome in a **Spike findings** section (GREEN/RED + what was learned).
+3. **For a large design, add a "Build phasing" section:** ordered, independently-verifiable slices (Phase A, B, …) — each phase lands as a working, testable commit, so the build can pause and resume (even across sessions) without losing the thread. Skip it for small designs — the same depth-scales-with-complexity rule as the interview.
+4. **Promote knowledge:** design-level rejects stay inline in the feature doc; **project / architecture-level** rejects → PLAN's Rejected Ideas; decisions worth logging → PLAN's Decisions log. Update the Features table row / status and refresh `Last updated:` markers.
 
 ## Phase 4 — Persist
 
