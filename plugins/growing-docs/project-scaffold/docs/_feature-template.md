@@ -1,6 +1,6 @@
 # {Feature Name}
 
-_Last updated: {date or short commit SHA} — recency signal, not a correctness guarantee. If the code has moved past this, trust the code._
+_Last updated: {date or short commit SHA} — recency signal, not a correctness guarantee. If the code has moved past this, trust the code. Files / Dependencies / API below are **derivable caches** — when stale, regenerate them from the code; hand-maintain only the sections above them (the code can't re-derive those)._
 
 ## Description
 What it does and why it exists.
@@ -17,6 +17,10 @@ _Optional — for large features: ordered, independently-verifiable build slices
 _Optional — outcomes of feasibility probes on empirical unknowns (offered by `/forge` when a design hinges on one). The spike code is disposable; the FINDING is durable. Omit if unused._
 - {date} — **{question}** → **GREEN/RED**: {what was learned}
 
+## Gotchas
+Edge cases, workarounds, things that will break if you're not careful.
+Document what you tried that DIDN'T work and why.
+
 ## Files
 List of routes, components, services, and other files involved.
 
@@ -25,10 +29,6 @@ Other features or services this relies on.
 
 ## API / Interface
 Endpoints, props, function signatures — whatever the "surface area" is.
-
-## Gotchas
-Edge cases, workarounds, things that will break if you're not careful.
-Document what you tried that DIDN'T work and why.
 
 ## Changelog
 - {date}: Initial implementation

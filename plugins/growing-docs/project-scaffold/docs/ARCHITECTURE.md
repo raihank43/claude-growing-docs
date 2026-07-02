@@ -1,6 +1,6 @@
 # Architecture
 
-_Last updated: {date or short commit SHA} — recency signal, not a correctness guarantee. The folder tree and data flow below rot fastest; if they disagree with the repo, trust the repo._
+_Last updated: {date or short commit SHA} — recency signal, not a correctness guarantee. The folder tree and data flow below rot fastest; if they disagree with the repo, trust the repo. They're **derivable caches** — when stale, regenerate them from the repo rather than hand-maintaining them line by line._
 
 ## Tech Stack
 
