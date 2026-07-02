@@ -34,7 +34,7 @@ Walk the design tree, **resolving dependencies one at a time.** The rules:
   - *UI/UX visual choice* → build a throwaway, self-contained, project-themed prototype at `scratch/<name>.html` (ensure `scratch/` is gitignored first) demonstrating the options, and let the user pick.
   - *Empirical unknown* (feasibility, performance, does-the-API-actually-behave-that-way — a question neither the user nor the docs can answer) → offer a **spike**: a minimal, throwaway code probe that answers it before the design commits to the answer. The spike code is disposable (gitignored `scratch/` or a temporary probe — the project's call); the **finding** is the durable artifact — record GREEN/RED + what was learned in the feature doc's **Spike findings** section.
   - *Open / exploratory* (what should happen when X? success criteria?) → prose, so the user can think out loud.
-- **Cover the dimensions** the docs make answerable: purpose & scope; **overlap-check against the Features table**; **rejected-ideas check**; dependencies / ordering; edge cases & failure modes; data / state / contracts; UX (→ prototype); success criteria.
+- **Cover the dimensions** the docs make answerable: purpose & scope; **overlap-check against the Features table**; **rejected-ideas check**; naming (consult RULES' **Glossary** — reuse established terms, don't coin colliding ones); dependencies / ordering; edge cases & failure modes; data / state / contracts; UX (→ prototype); success criteria.
 
 **Escape hatch.** At any point the user can say *"enough — fill the rest with your recommendations."* Complete the remaining branches with your recommended defaults, and in the write-up **mark which decisions were user-confirmed vs forge-defaulted**, so the negative space stays honest.
 
@@ -49,7 +49,7 @@ Walk the design tree, **resolving dependencies one at a time.** The rules:
 
 ## Phase 4 — Persist
 
-- **Privacy guard** (same as `/checkpoint` / `/project-adopt`): if the repo is public, scan the chat-sourced docs for private / cross-project content before committing (offer sanitize / keep-local / proceed).
+- **Privacy guard** (same as `/checkpoint` / `/project-adopt`): if the repo is public, scan the chat-sourced docs — **and the commit message itself** — for private / cross-project content before committing (offer sanitize / keep-local / proceed).
 - **Commit the docs-only design** following the project's own git / release convention — like `/project-init` commits brainstorming. **Never commit code** (forge writes none). **If the project's dev docs are gitignored / local-only**, the writes simply stay on disk — commit only tracked changes, and say so plainly rather than treating it as an error. Push per the project's convention (some projects push only on request); otherwise push if a remote is configured.
 - **Refresh PLAN's Current Focus** (or offer `/checkpoint` if the session is ending) so the brief points at the freshly decided design as the next build step — don't leave a pre-forge brief in place.
 - **Report** what was decided and the feature-doc path, and note that **building is the next step** — the normal workflow picks up from the doc (you can even start a fresh chat; the design now survives).

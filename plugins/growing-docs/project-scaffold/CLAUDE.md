@@ -20,6 +20,7 @@ This workflow applies to every request that **changes the project** — a major 
 - Follow all conventions in `/docs/RULES.md`
 - Follow the architecture patterns in `/docs/ARCHITECTURE.md`
 - If you discover a gotcha, edge case, or non-obvious behavior — write it down immediately in the relevant feature doc before you forget
+- When a hard debugging session ends, capture **both halves**: the root cause (a Gotcha) *and* the hypotheses you ruled out on the way — failed hypotheses are rejected-ideas-for-debugging; the next session shouldn't re-walk your dead ends
 - **Code is the source of truth.** If a doc contradicts what the code actually does, the code wins — fix the doc as part of your change. Stale docs that lie are worse than no docs. If two docs disagree with *each other*, precedence runs: code → the relevant `feature-*.md` → `ARCHITECTURE.md` / `PLAN.md` → `README.md`. Reconcile toward the higher-precedence source.
 
 ### Step 3: Update Documentation (BEFORE committing)

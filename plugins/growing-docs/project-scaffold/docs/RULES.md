@@ -2,7 +2,7 @@
 
 ## Main Principles
 
-{To be filled as the project develops — overarching philosophies for how code should be written.}
+{To be filled as the project develops — overarching philosophies for how code should be written. Process disciplines the team works by — TDD, review rituals, debugging practice — belong here too: they're project conventions, not global truths.}
 
 ## Folder Structure Conventions
 
@@ -15,6 +15,14 @@
 ## Code Style
 
 {To be filled — formatting, imports, patterns to follow.}
+
+## Glossary
+
+The project's domain language — terms code, docs, and conversations should use consistently. Grown organically: add a term when it's coined, or when a naming collision gets resolved (note the "not to be confused with…").
+
+| Term | Meaning |
+|------|---------|
+| | |
 
 ## Anti-Patterns
 

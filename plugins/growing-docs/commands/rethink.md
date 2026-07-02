@@ -50,7 +50,7 @@ After the user triages:
 - **Accepted** → add to PLAN (a Features row + a Decisions entry), and **offer to `/forge`** each into a decided design. Forge → build is the path to actually shipping it.
 - **Rejected** → log to PLAN's **Rejected Ideas** with the reason, so a future `/rethink` re-examines it as a fence instead of re-proposing it blindly.
 - The dated proposal file **stays as the full record** — including the not-pursued proposals (preserved negative space).
-- **Privacy guard** (same as `/checkpoint` / `/project-adopt`): on a public repo, scan the chat-sourced docs for private / cross-project content before committing.
+- **Privacy guard** (same as `/checkpoint` / `/project-adopt`): on a public repo, scan the chat-sourced docs — **and the commit message itself** — for private / cross-project content before committing.
 - **Commit the docs-only output** following the project's git convention. **Never commit code** (rethink writes none). **If the project's dev docs are gitignored / local-only**, the writes simply stay on disk — commit only tracked changes, and say so plainly rather than treating it as an error. Push per the project's convention (some projects push only on request); otherwise push if a remote is configured.
 - **Refresh PLAN's Current Focus before ending** (or offer `/checkpoint` if the session is wrapping up), so the brief reflects this run — proposals written, triage state, what's next. A rethink that leaves the old brief in place hands the next session a stale picture.
 
