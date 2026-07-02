@@ -59,6 +59,8 @@ Before building a feature that's still vague — a one-line backlog entry, compe
 ### `/checkpoint` — mid-session save-and-sync
 Run it at a save point: a feature landed, you're taking a break, or the conversation has gotten big and you want to start a fresh one. It reconciles the docs against **both the code and the current conversation** — capturing decisions, gotchas, rejected ideas, and idea dumps (those go to a dated batch in `docs/BACKLOG.md`) that were only ever *discussed* — refreshes the staleness markers, then writes two things: the **full session report**, appended to `docs/CHECKPOINTS.md` (an uncapped, newest-first log — verification evidence and root-cause detail finally have a home), and a tight **"Current Focus" handoff brief** so the next session cold-starts in seconds. The deliberate, lossless alternative to waiting for auto-compaction: checkpoint, then start a fresh chat that inherits everything through the docs. Commits following the project's own git/release convention. Runs on a cheaper model (Sonnet) — it's a focused, repo-grounded sweep, and it executes inline so it still sees your full conversation, keeping a checkpoint cheap even from a large chat.
 
+Also ships an on-demand deep mode, **`/checkpoint lint`** — a whole-tree consistency sweep (orphan feature docs, dead links, doc-vs-doc contradictions, stale markers) that fixes the mechanical findings and surfaces the judgment calls. Run it occasionally as the doc tree grows; a normal checkpoint will point you to it when it trips over something.
+
 ## Install
 
 ```

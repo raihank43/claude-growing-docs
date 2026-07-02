@@ -14,6 +14,20 @@ A deliberate doc-reconciliation sweep you invoke by hand. The per-change workflo
 
 This command reconciles docs but **never changes code**. If the repo has no `CLAUDE.md` / `docs/` (not a growing-docs project yet), tell the user to run `/project-adopt` first.
 
+## Lint mode — `/checkpoint lint` (on-demand whole-tree consistency sweep)
+
+If the invocation carries the argument `lint`, run THIS instead of the numbered steps below. Where a normal checkpoint reconciles what the diff and the conversation touched, lint mechanically walks the **whole doc tree** for consistency rot. Boundaries: template-*structure* drift is `/project-adopt` Upgrade's job; design *challenge* is `/rethink`'s — lint is consistency only.
+
+**The checks:**
+1. **Features table ↔ feature docs, both directions** — every `docs/feature-*.md` has a Features-table row (orphan docs); every row's Doc link resolves (dead rows).
+2. **Dangling links** — doc-to-doc links in `CLAUDE.md` + `docs/` pointing at files or anchors that don't exist.
+3. **Staleness outliers** — a `Last updated:` far behind recent git activity on that feature's files. **Flag these, don't refresh them** — bumping a marker without verifying the content is the unearned-verified-badge disease.
+4. **Bounded contradiction pass** — where the same claim lives in more than one doc (README ↔ ARCHITECTURE ↔ feature docs: versions, counts, behavior descriptions), check they agree. Resolve via the precedence rule (code → feature doc → ARCHITECTURE/PLAN → README); ask the user only when genuinely ambiguous.
+
+**Fix policy:** mechanical findings — a missing Features row, a dead link, a wrong count — **fix directly**. Judgment findings — a contradiction precedence can't settle, a doc describing intended behavior the code lost (don't paper over a bug), code diverging from a `Decided design` section (see step 2A's exception) — **surface to the user** instead.
+
+**Report & persist:** append a lint entry to `docs/CHECKPOINTS.md` (`## <date> — <sha> — lint: N checked, M fixed, K surfaced`), then privacy-check + commit the fixes like a normal checkpoint (docs-only, project's convention). **Do NOT move the `Last checkpoint:` marker** — lint reconciles neither the diff nor the conversation, so moving it would falsely claim a full checkpoint happened.
+
 ## 1. Establish scope — what's happened since the last checkpoint
 - Read `docs/PLAN.md`. If it has a `Last checkpoint: <sha>` line, **first confirm that SHA is still in the branch** (`git merge-base --is-ancestor <sha> HEAD`). If it is, scope = `git diff <sha>..HEAD` + uncommitted changes. If it is **not** an ancestor (history was rewritten / force-pushed since the last checkpoint, so the baseline is orphaned), or there's no marker at all, treat this as a first checkpoint and rebaseline: scope = recent history (`git log --oneline -20`) + the working tree.
 - Run `git status` and `git diff` to see the actual code changes you'll be reconciling.
@@ -25,6 +39,7 @@ This is the core. There are two sources of truth-that-isn't-written-down:
 **A. The code** (what changed since last checkpoint):
 - For each area the diff touched, open the relevant `docs/feature-*.md` and read the **real current code**. Fix any drift — Files/Interface/Gotchas that no longer match, a "still not done" item that's now done, a brand-new feature with no doc (create it from `docs/_feature-template.md` and add a row to PLAN's Features table).
 - **Code is the source of truth** — where a doc disagrees with the code, fix the doc.
+- **Exception: a `Decided design` section is intent-of-record, not description.** If code has diverged from a decision recorded there, the divergence is a **question, never a silent sync** — ask the user: did the *design change* (append a dated revision, move the superseded choice into the rejected alternatives) or did the *build drift* from the decision (flag it)? Rewriting a recorded *why* to match drifted code destroys the one thing the section exists to preserve. Same spirit as "don't paper over a bug," extended from broken-looking code to decision-contradicting code.
 
 **B. This conversation** (knowledge that only exists in the chat):
 - Scan back over the conversation for things decided, discovered, or discarded that never made it into a doc:
@@ -46,6 +61,8 @@ This is the core. There are two sources of truth-that-isn't-written-down:
   - <idea>
   ```
 - This is the half a plain code-diff misses, and it's the most important for surviving compaction or a fresh start — once the conversation is gone, this knowledge is gone with it.
+
+If along the way you trip over a lint-class issue **outside** the diff's scope — an orphan feature doc, a dead link, a contradiction between docs you didn't touch — don't chase it in this run: note it to the user in one line and point at `/checkpoint lint` for the full sweep.
 
 ## 3. Refresh staleness markers
 Update the `Last updated:` line on every doc you touched (today's date + the current short commit SHA).
