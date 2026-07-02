@@ -42,7 +42,7 @@ Produce the proposals. Each one is:
 
 Guard against over-eagerness: **don't import generic best-practices that ignore the project's deliberate choices** — the docs exist precisely to record those deviations. Approach undocumented "improvements" with humility.
 
-Write them to `docs/proposals/<YYYY-MM-DD>-rethink.md` (create `docs/proposals/` if absent). Then **present the tiered list and discuss** — this is a conversation, not a verdict.
+Write them to `docs/proposals/<YYYY-MM-DD>-rethink.md` (create `docs/proposals/` if absent; if that file already exists — a second run the same day — use a numbered suffix: `<YYYY-MM-DD>-rethink-2.md`). Then **present the tiered list and discuss** — this is a conversation, not a verdict.
 
 ## Phase 4 — Triage, graduate & persist
 
@@ -51,7 +51,8 @@ After the user triages:
 - **Rejected** → log to PLAN's **Rejected Ideas** with the reason, so a future `/rethink` re-examines it as a fence instead of re-proposing it blindly.
 - The dated proposal file **stays as the full record** — including the not-pursued proposals (preserved negative space).
 - **Privacy guard** (same as `/checkpoint` / `/project-adopt`): on a public repo, scan the chat-sourced docs for private / cross-project content before committing.
-- **Commit the docs-only output** following the project's git convention. **Never commit code** (rethink writes none). Push only if a remote is configured.
+- **Commit the docs-only output** following the project's git convention. **Never commit code** (rethink writes none). **If the project's dev docs are gitignored / local-only**, the writes simply stay on disk — commit only tracked changes, and say so plainly rather than treating it as an error. Push per the project's convention (some projects push only on request); otherwise push if a remote is configured.
+- **Refresh PLAN's Current Focus before ending** (or offer `/checkpoint` if the session is wrapping up), so the brief reflects this run — proposals written, triage state, what's next. A rethink that leaves the old brief in place hands the next session a stale picture.
 
 ## Notes
 

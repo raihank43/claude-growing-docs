@@ -48,7 +48,8 @@ Walk the design tree, **resolving dependencies one at a time.** The rules:
 ## Phase 4 — Persist
 
 - **Privacy guard** (same as `/checkpoint` / `/project-adopt`): if the repo is public, scan the chat-sourced docs for private / cross-project content before committing (offer sanitize / keep-local / proceed).
-- **Commit the docs-only design** following the project's own git / release convention — like `/project-init` commits brainstorming. **Never commit code** (forge writes none). Push only if a remote is configured.
+- **Commit the docs-only design** following the project's own git / release convention — like `/project-init` commits brainstorming. **Never commit code** (forge writes none). **If the project's dev docs are gitignored / local-only**, the writes simply stay on disk — commit only tracked changes, and say so plainly rather than treating it as an error. Push per the project's convention (some projects push only on request); otherwise push if a remote is configured.
+- **Refresh PLAN's Current Focus** (or offer `/checkpoint` if the session is ending) so the brief points at the freshly decided design as the next build step — don't leave a pre-forge brief in place.
 - **Report** what was decided and the feature-doc path, and note that **building is the next step** — the normal workflow picks up from the doc (you can even start a fresh chat; the design now survives).
 
 ## Edge cases

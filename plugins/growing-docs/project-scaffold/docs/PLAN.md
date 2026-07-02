@@ -35,7 +35,7 @@ Status values: `planned` | `in-progress` | `done` | `cut`
 
 ## Decisions Log
 
-Record every significant decision so future-you (or post-compaction-you) knows WHY things are the way they are.
+Record every significant decision so future-you (or post-compaction-you) knows WHY things are the way they are. Append new rows at the bottom — newest last.
 
 | Decision | Rationale | Date |
 |----------|-----------|------|
@@ -43,7 +43,7 @@ Record every significant decision so future-you (or post-compaction-you) knows W
 
 ## Rejected Ideas
 
-Record ideas we considered and explicitly decided NOT to do. This prevents re-suggesting them after compaction.
+Record ideas we considered and explicitly decided NOT to do. This prevents re-suggesting them after compaction. Append new rows at the bottom — newest last.
 
 | Idea | Why Rejected | Date |
 |------|-------------|------|
