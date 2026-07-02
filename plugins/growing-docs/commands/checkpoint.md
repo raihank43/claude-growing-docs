@@ -49,6 +49,7 @@ This is the core. There are two sources of truth-that-isn't-written-down:
   - **Future-work ideas mentioned but not tracked** (an idea dump, "we should also…", "someday…") → a dated batch in `docs/BACKLOG.md` (create it on first use — see the stub below). Route by kind: future-work **ideas** go to the backlog; present **knowledge** (gotchas, architectural understanding) goes to the docs above — never cross them. Don't add Features-table rows for un-triaged ideas: **the Features table is canonical** — an idea only gets a row when it graduates (and then leaves the backlog).
   - **New conventions or anti-patterns** agreed → `docs/RULES.md`; new **domain terms** coined or clarified (a concept named, a naming collision resolved) → RULES' Glossary.
   - **User-visible changes** → `README.md`.
+  - **A documented rule violated — or nearly violated** → don't just re-edit the prose; run the graduation decision in **C** below.
 
   `docs/BACKLOG.md` stub (first use; append new batches at the end, entries as bullets):
   ```
@@ -61,6 +62,17 @@ This is the core. There are two sources of truth-that-isn't-written-down:
   - <idea>
   ```
 - This is the half a plain code-diff misses, and it's the most important for surviving compaction or a fresh start — once the conversation is gone, this knowledge is gone with it.
+
+**C. The violation audit ("twice bitten → teeth"):**
+
+Ask of the session: **was any documented rule violated, or nearly violated?** Documented = CLAUDE.md's Invariants, RULES.md (conventions and anti-patterns), a feature doc's Gotchas. Near-misses count — a violation caught mid-flight is the cheapest possible lesson. For each hit, force a **graduation decision** (AskUserQuestion, your recommendation first — **never a silent edit**):
+
+1. **Promote to CLAUDE.md's Invariants** — only for irreversible-harm rules (data loss, history rewrites, secrets, user-data writes); one incident of that class qualifies. Rewrite it **operation-shaped** first: an absolute about the operation ("never X, in any context"), not the workflow it happened inside ("when doing Y, avoid X") — the next violation arrives in a situation the rule's author never pictured, and workflow-shaped prose won't fire there. If the list is at its cap of 10, evict to make room: first any invariant that has since gained an executable guard (the guard closes it harder than prose can), then the least catastrophic. An evicted rule is **demoted to RULES.md with its story — never deleted**.
+2. **Rewrite the existing RULES.md entry operation-shaped** — for rules below the harm bar, or where situation-shaped prose failed to fire.
+3. **Add an executable guard** — when the violating operation is mechanically detectable. With the user's yes, draft it into the project's own `.claude/`: prefer a **declarative** `settings.json` permission deny rule (cross-platform, no executable to maintain); write a PreToolUse hook script only where a deny rule can't express the check. Keep it minimal, and note it in RULES.md with a pointer back to the rule it enforces. (The guard lives in the *project*, never in this plugin.)
+4. **Leave as-is** — recording the reason.
+
+Record every hit and its chosen outcome in the session report (Step 4A). A violation that produces no decision is how the same incident happens twice.
 
 If along the way you trip over a lint-class issue **outside** the diff's scope — an orphan feature doc, a dead link, a contradiction between docs you didn't touch — don't chase it in this run: note it to the user in one line and point at `/checkpoint lint` for the full sweep.
 
@@ -106,6 +118,7 @@ Keep the brief a pointer, not a transcript — the report (A) already holds the 
 Tell the user:
 - What was already in sync vs. what had drifted and got fixed.
 - What you captured from the conversation that wasn't written down anywhere (including any backlog batch).
+- Any violation-audit hits (Step 2C) and the graduation outcome chosen for each.
 - The report itself: what you report in chat and the entry you just wrote to `docs/CHECKPOINTS.md` (Step 4A) are **one content, written once** — show that same content here, plus the new checkpoint SHA and the Current Focus brief (Step 4B).
 - If they checkpointed in order to start fresh: confirm it's safe now — everything important is in the docs, so a new conversation will inherit the full picture.
 

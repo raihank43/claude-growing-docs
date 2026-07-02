@@ -1,6 +1,13 @@
 <!-- growing-docs template v{growing-docs-version} — stamped at scaffold/upgrade time; /project-adopt reads this to upgrade precisely. Keep this line. -->
 # {Project Name}
 
+## Invariants — never break these, in any context
+
+Operation-shaped absolutes guarding against **irreversible harm** (data loss, history rewrites, leaked secrets, user-data writes). One incident of that class qualifies a rule — don't wait for a second unrecoverable bite. Write each as an absolute about an *operation* ("never X, in any context"), never about a workflow ("when doing Y, avoid X") — violations arrive wearing situations the rule's author never pictured. **Hard cap: 10** — scarcity is what keeps these salient. `/checkpoint` runs the audit that feeds this list, plus promotions and evictions; a rule born from a project incident links to its full story in `docs/RULES.md`.
+
+- An automated script or teardown may only delete the exact paths it created. Anything found by *content search* is printed as a manifest for the user — never deleted. _(seed)_
+- Never rewrite pushed git history (force-push, reset past a pushed commit) without the user's explicit go-ahead in the current session. _(seed)_
+
 ## Workflow — Follow This For Every Change
 
 This workflow applies to every request that **changes the project** — a major feature, a one-line fix, a small addition, a refactor, a bug fix. Size doesn't matter: if it alters behavior, structure, or conventions, the full sequence runs. There is no change too small to skip it.

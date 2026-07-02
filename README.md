@@ -30,7 +30,7 @@ Recording the dead ends is the difference between docs that *describe* the proje
 
 | File | Purpose |
 |------|---------|
-| `CLAUDE.md` | The agent's workflow: read docs → work → update docs → verify → commit. Plus a git convention and an index of everything. |
+| `CLAUDE.md` | The agent's workflow: read docs → work → update docs → verify → commit. Plus a hard-capped **Invariants** list — operation-shaped absolutes against irreversible harm (data loss, history rewrites, secrets) that stay in context every session — a git convention, and an index of everything. |
 | `docs/PLAN.md` | Roadmap, feature status table, decisions log, and **rejected ideas** — with a `Project Phase` marker (`BRAINSTORMING` / `BUILDING`) that tells a fresh session how to behave. |
 | `docs/ARCHITECTURE.md` | Tech stack, folder structure, system overview, data flow. |
 | `docs/RULES.md` | Coding conventions, naming, and **anti-patterns** (things that were tried and failed). |
@@ -58,6 +58,8 @@ Before building a feature that's still vague — a one-line backlog entry, compe
 
 ### `/checkpoint` — mid-session save-and-sync
 Run it at a save point: a feature landed, you're taking a break, or the conversation has gotten big and you want to start a fresh one. It reconciles the docs against **both the code and the current conversation** — capturing decisions, gotchas, rejected ideas, and idea dumps (those go to a dated batch in `docs/BACKLOG.md`) that were only ever *discussed* — refreshes the staleness markers, then writes two things: the **full session report**, appended to `docs/CHECKPOINTS.md` (an uncapped, newest-first log — verification evidence and root-cause detail finally have a home), and a tight **"Current Focus" handoff brief** so the next session cold-starts in seconds. The deliberate, lossless alternative to waiting for auto-compaction: checkpoint, then start a fresh chat that inherits everything through the docs. Commits following the project's own git/release convention. Runs on a cheaper model (Sonnet) — it's a focused, repo-grounded sweep, and it executes inline so it still sees your full conversation, keeping a checkpoint cheap even from a large chat.
+
+It also audits the session for **documented rules that got violated (or nearly violated) anyway** — "twice bitten → teeth": instead of another prose re-edit, each hit gets a graduation offer — promote the rule (rewritten as an operation-shaped absolute) into CLAUDE.md's capped Invariants list, or give it an actual executable guard (a permissions deny rule or hook in *your* project's `.claude/`) when the operation is mechanically detectable.
 
 Also ships an on-demand deep mode, **`/checkpoint lint`** — a whole-tree consistency sweep (orphan feature docs, dead links, doc-vs-doc contradictions, stale markers) that fixes the mechanical findings and surfaces the judgment calls. Run it occasionally as the doc tree grows; a normal checkpoint will point you to it when it trips over something.
 
