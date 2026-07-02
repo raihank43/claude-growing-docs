@@ -59,6 +59,9 @@ If the project's CLAUDE.md has itself grown **fat** (deep knowledge inline that 
 
 ## U3: Patch the docs (additive only — never overwrite filled content)
 - `docs/PLAN.md`: if the **Project Phase** marker is missing, add it at the top. Set it to `BUILDING` for an active project (only `BRAINSTORMING` if the project is clearly still pre-build). Do NOT touch the Vision/Features/Decisions content.
+- **Current Focus / backlog hygiene (offer, never silent):** two legacy patterns the older templates allowed to accumulate inside PLAN.md — if you find either, **ask** before touching it (content is relocated verbatim, never dropped; skip on "no"):
+  - Accumulated checkpoint history in Current Focus (`_(prior checkpoint …)_` blocks or stacked session reports) → offer to relocate into `docs/CHECKPOINTS.md` (newest first, dated `## <date> — <sha> — <title>` entries; create with its stub — see `/checkpoint`) and slim Current Focus to the brief format (Just shipped / In flight / Next / Start here).
+  - An ad-hoc backlog section living inside PLAN.md → offer to relocate into `docs/BACKLOG.md` (dated batches; the Features table stays canonical).
 - `docs/_feature-template.md`: add it if missing (copy from scaffold).
 - `docs/RULES.md`, `docs/ARCHITECTURE.md`, `README.md`, existing `feature-*.md`: leave content alone. Only add a missing *section heading* if a template section is entirely absent and clearly useful — and leave it as `{To be filled}`.
 - `.gitignore`: append any missing secret patterns; never overwrite.

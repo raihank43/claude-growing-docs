@@ -14,6 +14,7 @@ If the repo has no `CLAUDE.md` / `docs/` (not a growing-docs project), tell the 
 
 1. **Resolve what you're forging:**
    - `/forge <feature-name>` → a feature already in PLAN's Features table.
+   - `/forge <backlog-item>` → an entry in `docs/BACKLOG.md`. **Graduate it up front:** add a `planned` row to the Features table and delete the backlog entry (the Features table is canonical — one live copy of every idea).
    - `/forge <free description>` → a brand-new idea. Add a `planned` row to the Features table **up front** so an interrupted forge isn't lost.
    - bare `/forge` → infer the target from the current conversation / PLAN's Current Focus, and **confirm it** before diving in.
 2. **Read the docs as ammunition** (don't interview blind): PLAN's Features table, Decisions log, and Rejected Ideas; the feature's own doc if one exists; RULES and ARCHITECTURE for constraints. Explore the code where relevant.

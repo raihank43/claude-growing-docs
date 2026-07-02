@@ -31,21 +31,50 @@ This is the core. There are two sources of truth-that-isn't-written-down:
   - **Decisions** made out loud → `docs/PLAN.md` Decisions log.
   - **Gotchas / non-obvious behavior** hit while working → the relevant `feature-*.md` Gotchas.
   - **Ideas considered and rejected** → `docs/PLAN.md` Rejected Ideas (with the *why*).
+  - **Future-work ideas mentioned but not tracked** (an idea dump, "we should also…", "someday…") → a dated batch in `docs/BACKLOG.md` (create it on first use — see the stub below). Route by kind: future-work **ideas** go to the backlog; present **knowledge** (gotchas, architectural understanding) goes to the docs above — never cross them. Don't add Features-table rows for un-triaged ideas: **the Features table is canonical** — an idea only gets a row when it graduates (and then leaves the backlog).
   - **New conventions or anti-patterns** agreed → `docs/RULES.md`.
   - **User-visible changes** → `README.md`.
+
+  `docs/BACKLOG.md` stub (first use; append new batches at the end, entries as bullets):
+  ```
+  # Backlog
+  Un-triaged ideas in dated batches. The Features table in PLAN.md is canonical: an idea
+  that graduates gets a Features row and is DELETED here; one rejected at triage goes to
+  PLAN's Rejected Ideas (with the why) and is deleted here. Only undecided ideas live here.
+
+  ## <YYYY-MM-DD> — <context of the dump>
+  - <idea>
+  ```
 - This is the half a plain code-diff misses, and it's the most important for surviving compaction or a fresh start — once the conversation is gone, this knowledge is gone with it.
 
 ## 3. Refresh staleness markers
 Update the `Last updated:` line on every doc you touched (today's date + the current short commit SHA).
 
-## 4. Write the handoff note — the cold-start brief
-Update the **Current Focus** section in `docs/PLAN.md` (add it if missing) to a tight brief so a fresh session can resume *without re-reading everything*. Write it once here — it's the SAME content you'll report in chat (Step 6):
+## 4. Write the session report AND the cold-start brief — two artifacts, one content
+
+**A. The full session report → `docs/CHECKPOINTS.md`.** Create the file on first use (stub below), then add this checkpoint's entry **at the top, right under the header** — newest first. This is the **uncapped** home for the rich detail: what shipped and why, verification evidence (tests run, live checks), root causes found, known blind spots, recipes worth keeping. Don't trim it to fit anywhere — giving this content a home is the file's whole purpose. Entry format:
+
+```
+## <YYYY-MM-DD> — <short sha> — <one-line title>
+<the full report>
+```
+
+File stub (first use):
+```
+# Checkpoint Log
+Full session reports from `/checkpoint`, newest first. The cold-start brief lives in
+PLAN.md's Current Focus; this file is the uncapped history behind it.
+```
+
+**B. The cold-start brief → the Current Focus section in `docs/PLAN.md`** (add the section if missing). A tight distillate — **~15–30 lines** — so a fresh session resumes *without re-reading everything*:
 - **Just shipped:** the last milestone that landed.
 - **In flight:** anything half-done a new session would need to know — or "nothing — clean stopping point."
 - **Next:** the immediate next step.
 - **Start here:** the 1–3 docs/files relevant to "Next" — so the next session reads *those*, not all of `docs/`.
 
-Keep it tight — a pointer for resuming, not a transcript. The **Start here** line is what keeps the next session token-efficient: it reads the named docs instead of crawling the whole `docs/` tree to figure out what's relevant.
+Keep the brief a pointer, not a transcript — the report (A) already holds the detail. The **Start here** line is what keeps the next session token-efficient: it reads the named docs instead of crawling the whole `docs/` tree to figure out what's relevant.
+
+**Legacy cleanup (offer, never silent).** If Current Focus is carrying accumulated history — `_(prior checkpoint …)_` blocks, or stacked old session reports — **offer once** to relocate them verbatim into `docs/CHECKPOINTS.md` as dated entries and slim Current Focus to the brief. Likewise, if an ad-hoc backlog section lives inside PLAN.md, offer to relocate it into `docs/BACKLOG.md` as dated batches. Content is relocated verbatim, never dropped — and only with the user's yes.
 
 ## 5. Commit — following the project's OWN convention
 
@@ -54,13 +83,13 @@ Keep it tight — a pointer for resuming, not a transcript. The **Start here** l
 - Read CLAUDE.md's **Git Convention** / release section. If the project mandates a release path (e.g. a publish script, or an explicit "never hand-run git commit"), **follow it** — don't bypass it. Otherwise commit directly.
 - **If the dev docs are gitignored / local-only** (some public repos keep their own docs untracked), the updates just stay on disk — there's nothing to commit for them; only commit *tracked* changes. Still update the marker in the local `docs/PLAN.md`.
 - Message: `docs: checkpoint — sync docs with code + conversation ({one line of what drifted})`.
-- Record the checkpoint point: update (or add) the `Last checkpoint: <sha>` line in `docs/PLAN.md` to the HEAD you reconciled to.
+- Record the checkpoint point: update (or add) the `Last checkpoint:` line in `docs/PLAN.md` — **bare `<sha> (<date>)`, nothing more**. The detail lives in `docs/CHECKPOINTS.md`, not the marker.
 
 ## 6. Report
-Concisely tell the user:
+Tell the user:
 - What was already in sync vs. what had drifted and got fixed.
-- What you captured from the conversation that wasn't written down anywhere.
-- The new checkpoint SHA, and the **Current Focus brief you just wrote** (Step 4) — that same cold-start brief is what the next session resumes from, so what you report here and what's in PLAN are one and the same.
+- What you captured from the conversation that wasn't written down anywhere (including any backlog batch).
+- The report itself: what you report in chat and the entry you just wrote to `docs/CHECKPOINTS.md` (Step 4A) are **one content, written once** — show that same content here, plus the new checkpoint SHA and the Current Focus brief (Step 4B).
 - If they checkpointed in order to start fresh: confirm it's safe now — everything important is in the docs, so a new conversation will inherit the full picture.
 
 ## Notes

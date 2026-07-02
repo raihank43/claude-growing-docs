@@ -10,7 +10,7 @@
 
 ## Current Focus
 
-> The 30-second cold-start brief — so a fresh session (or a post-compaction one) can resume *without re-reading everything*. Kept current by `/checkpoint`. **Read this first**, then read only the docs the "Start here" line points to.
+> The 30-second cold-start brief — so a fresh session (or a post-compaction one) can resume *without re-reading everything*. Kept current by `/checkpoint`: **the tight brief only** lives here (~15–30 lines); the full session reports go to `docs/CHECKPOINTS.md` (created by `/checkpoint`, newest first). **Read this first**, then read only the docs the "Start here" line points to.
 
 _Last checkpoint: none yet_
 
@@ -24,6 +24,8 @@ _Last checkpoint: none yet_
 {To be filled during brainstorming — the big picture of what we're building and why.}
 
 ## Features
+
+Un-triaged ideas live in `docs/BACKLOG.md` (created on demand) — **this table is canonical**: an idea that graduates gets a row here and is deleted from the backlog.
 
 | Feature | Priority | Status | Doc |
 |---------|----------|--------|-----|

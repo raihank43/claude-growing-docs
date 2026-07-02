@@ -64,7 +64,7 @@ Cross-cutting knowledge has two homes — pick the right one:
 Rule of thumb: if it would help anyone working on *this repo*, it's `RULES.md`. If it only makes sense because it's *this user*, it's memory.
 
 ### Checkpoints
-At natural save points — a feature landed, before a break, or before the conversation gets large enough that you'll want to start fresh — run `/checkpoint`. It sweeps the docs against the code *and* this conversation, captures anything discussed-but-unwritten (decisions, gotchas, rejected ideas), refreshes the `Last updated:` markers, and writes a Current Focus handoff note. It's the deliberate, lossless alternative to waiting for auto-compaction: checkpoint, then start a fresh chat that inherits everything through the docs.
+At natural save points — a feature landed, before a break, or before the conversation gets large enough that you'll want to start fresh — run `/checkpoint`. It sweeps the docs against the code *and* this conversation, captures anything discussed-but-unwritten (decisions, gotchas, rejected ideas, backlog-worthy idea dumps), refreshes the `Last updated:` markers, appends the full session report to `docs/CHECKPOINTS.md`, and writes a tight Current Focus handoff brief. It's the deliberate, lossless alternative to waiting for auto-compaction: checkpoint, then start a fresh chat that inherits everything through the docs.
 
 ## Git Convention
 
@@ -92,6 +92,8 @@ Remote: {to be configured}
 | `docs/_feature-template.md` | Template to copy when documenting a new feature |
 | `docs/feature-*.md` | Per-feature documentation (created as features are built) |
 | `docs/proposals/` | `/rethink` output — dated proposal files (created on demand) |
+| `docs/CHECKPOINTS.md` | Full `/checkpoint` session reports, newest first (created on demand) |
+| `docs/BACKLOG.md` | Un-triaged idea dumps in dated batches (created on demand; the PLAN Features table is canonical) |
 
 ## Complex Decisions
 
