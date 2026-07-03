@@ -42,7 +42,7 @@ The core idea: the agent **decides** after every request — large or small — 
 ## Commands
 
 ### `/project-init` — new project from scratch
-Pitch-first. Describe your idea (you don't even need a name — it'll suggest one), and it scaffolds the docs, initializes git, then brainstorms the plan *with* you, filling in the docs as you talk. It handles the "I started Claude from my home directory" case by telling you exactly how to relocate without losing anything.
+Pitch-first. Describe your idea (you don't even need a name — it'll suggest one), and it scaffolds the docs, initializes git, then **brainstorms the plan with you before anything gets decided**: it researches the load-bearing unknowns against primary sources (findings land in the docs as feasibility notes), proposes directions with honest trade-offs, and drafts a roadmap *you* reshape — the tech stack is chosen after exploration, not asked up front. At the end it offers to design features up front via `/forge` (all of them, just the foundational ones, or as-you-go). The brainstorm runs in your current session even if you started Claude from your home directory — only *building* needs the right directory, and it tells you exactly how to relocate.
 
 ### `/project-adopt` — existing codebase
 Run it from inside a repo. It can:
