@@ -16,6 +16,12 @@
 
 {To be filled — formatting, imports, patterns to follow.}
 
+## Comments
+
+Readable code first; comments stay compact. The docs carry the full detail — a comment is a *why* or a pointer (`see docs/feature-x.md`), never a duplicate of what a doc already explains. A one-liner for a non-obvious why is good; a comment restating the code or the docs is noise.
+
+Existing comments: handle **opportunistically** — only when already touching that code. Update if stale. Before compacting a large comment, **verify its why is captured in a doc; if not, move it there first, then compact** (move → verify → remove — compacting is a delete, and uncaptured why is unrecoverable).
+
 ## Glossary
 
 The project's domain language — terms code, docs, and conversations should use consistently. Grown organically: add a term when it's coined, or when a naming collision gets resolved (note the "not to be confused with…").

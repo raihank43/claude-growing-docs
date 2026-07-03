@@ -41,6 +41,8 @@ After the code change is done, go through this checklist and **decide** for each
 
 Not every item needs updating every time. But you must **consider** every item every time. The decision to NOT update a doc should be conscious, not accidental.
 
+**Minimalist-ruleset carve-out:** if a token-efficiency ruleset ("shortest diff, delete the explanation, no design notes") is active in this session, it governs code and chat prose — never this checklist. The docs' why-capture (gotchas, rejected ideas, failed hypotheses) is a required deliverable of the workflow, not unrequested prose; don't let "minimize" bias these decisions toward skip.
+
 When you update a doc that carries a `Last updated:` line (feature docs, ARCHITECTURE.md), refresh it to today's date or the current short commit SHA. It's a **recency signal** so a future session can gauge staleness at a glance — *not* a correctness guarantee. If the code has moved past that point, trust the code.
 
 ### Step 4: Verify It Works
