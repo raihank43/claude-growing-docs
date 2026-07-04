@@ -23,6 +23,7 @@ If the invocation carries the argument `lint`, run THIS instead of the numbered 
 2. **Dangling links** — doc-to-doc links in `CLAUDE.md` + `docs/` pointing at files or anchors that don't exist.
 3. **Staleness outliers** — a `Last updated:` far behind recent git activity on that feature's files. **Flag these, don't refresh them** — bumping a marker without verifying the content is the unearned-verified-badge disease.
 4. **Bounded contradiction pass** — where the same claim lives in more than one doc (README ↔ ARCHITECTURE ↔ feature docs: versions, counts, behavior descriptions), check they agree. Resolve via the precedence rule (code → feature doc → ARCHITECTURE/PLAN → README); ask the user only when genuinely ambiguous.
+5. **Altitude check** — RULES entries that read as war stories (dated incident narrative, fix mechanics, multi-paragraph bodies) instead of rule + why + pointer (the file's entry-shape header). Judgment-surfaced, never auto-fixed: each hit becomes a demotion offer — move the story into the named feature doc's Gotchas, verify it landed, then compact the entry to rule + pointer (move → verify → remove; demotion is a delete, and uncaptured why is unrecoverable).
 
 **Fix policy:** mechanical findings — a missing Features row, a dead link, a wrong count — **fix directly**. Judgment findings — a contradiction precedence can't settle, a doc describing intended behavior the code lost (don't paper over a bug), code diverging from a `Decided design` section (see step 2A's exception) — **surface to the user** instead.
 
@@ -47,7 +48,7 @@ This is the core. There are two sources of truth-that-isn't-written-down:
   - **Gotchas / non-obvious behavior** hit while working → the relevant `feature-*.md` Gotchas.
   - **Ideas considered and rejected** → `docs/PLAN.md` Rejected Ideas (with the *why*).
   - **Future-work ideas mentioned but not tracked** (an idea dump, "we should also…", "someday…") → a dated batch in `docs/BACKLOG.md` (create it on first use — see the stub below). Route by kind: future-work **ideas** go to the backlog; present **knowledge** (gotchas, architectural understanding) goes to the docs above — never cross them. Don't add Features-table rows for un-triaged ideas: **the Features table is canonical** — an idea only gets a row when it graduates (and then leaves the backlog).
-  - **New conventions or anti-patterns** agreed → `docs/RULES.md`; new **domain terms** coined or clarified (a concept named, a naming collision resolved) → RULES' Glossary.
+  - **New conventions or anti-patterns** agreed → `docs/RULES.md`; new **domain terms** coined or clarified (a concept named, a naming collision resolved) → RULES' Glossary. New RULES entries follow the file's entry-shape header — rule + one-line why + pointer; the full story lands in the relevant feature doc's Gotchas, not in RULES.
   - **User-visible changes** → `README.md`.
   - **A documented rule violated — or nearly violated** → don't just re-edit the prose; run the graduation decision in **C** below.
 
@@ -98,7 +99,7 @@ PLAN.md's Current Focus; this file is the uncapped history behind it.
 **B. The cold-start brief → the Current Focus section in `docs/PLAN.md`** (add the section if missing). A tight distillate — **~15–30 lines** — so a fresh session resumes *without re-reading everything*:
 - **Just shipped:** the last milestone that landed.
 - **In flight:** anything half-done a new session would need to know — or "nothing — clean stopping point."
-- **Next:** the immediate next step.
+- **Next:** the immediate next step — a **single headline item** carrying (1) a provenance tag: `(user-stated <date>)` when the user chose it this session, or `(inferred — recency/priority; not user-confirmed)` when you picked it; and (2) a **queue tail**: the count of non-`done` Features rows plus, if `docs/BACKLOG.md` exists, its un-triaged count. Next is the tip, not the queue — the tag and tail keep a fresh session from mistaking your recency-weighted pick for a triaged priority call.
 - **Start here:** the 1–3 docs/files relevant to "Next" — so the next session reads *those*, not all of `docs/`.
 
 Keep the brief a pointer, not a transcript — the report (A) already holds the detail. The **Start here** line is what keeps the next session token-efficient: it reads the named docs instead of crawling the whole `docs/` tree to figure out what's relevant.

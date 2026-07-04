@@ -19,7 +19,7 @@ This workflow applies to every request that **changes the project** — a major 
 2. Open `/docs/PLAN.md` and check the **Project Phase** marker at the top FIRST:
    - If `BRAINSTORMING`, the roadmap isn't settled yet — help the user flesh out the vision and features before writing code. Don't jump straight into building.
    - If `BUILDING`, proceed normally.
-3. Read **Current Focus** (top of PLAN.md) — the cold-start brief of where things left off (just-shipped / in-flight / next). If it has a **Start here** line, read those docs first; they're the ones relevant to resuming. This is your fastest path back into context — read them, not the whole `/docs/` tree.
+3. Read **Current Focus** (top of PLAN.md) — the cold-start brief of where things left off (just-shipped / in-flight / next). If it has a **Start here** line, read those docs first; they're the ones relevant to resuming. This is your fastest path back into context — read them, not the whole `/docs/` tree. For direction questions ("what's next?", "what's on our table?"), **Next** is the tip, not the queue — answer from the Features table (priority order) plus a skim of `docs/BACKLOG.md` if it exists, never from Current Focus alone.
 4. Use PLAN.md's **Features table as your map**: find the feature you're about to touch and open the doc in its `Doc` column. The table is the index — don't go globbing blindly through `/docs/`.
 5. Check `/docs/RULES.md` for conventions to follow
 
@@ -38,6 +38,7 @@ After the code change is done, go through this checklist and **decide** for each
 - [ ] **`README.md`** — Would a human reading this project for the first time need to know about what just changed? If yes, update it. New features, changed behavior, new commands — these all belong in README.
 - [ ] **`/docs/ARCHITECTURE.md`** — Did the system structure, data flow, or tech stack change?
 - [ ] **`/docs/RULES.md`** — Did you establish a new convention, discover an anti-pattern, or learn something about how code should be written in this project?
+- [ ] **Comment sweep** — comments *you wrote this session* whose story just landed in a doc: compact each to a one-line why + a pointer, in this same change. The doc carries the story; the comment carries the conclusion. (Pre-existing comments are not this sweep — those follow `docs/RULES.md` → Comments: opportunistic, move → verify → remove.)
 
 Not every item needs updating every time. But you must **consider** every item every time. The decision to NOT update a doc should be conscious, not accidental.
 

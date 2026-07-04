@@ -1,5 +1,7 @@
 # Code Rules
 
+_Entry shape: an entry here is a **generalized rule — imperative + one-line why + a pointer** to the feature doc holding the full story (the incident, the failed hypotheses, the fix mechanics). If a rule needs a war story to be believed, the story goes in the feature doc's Gotchas and gets linked — RULES stays skimmable in one pass._
+
 ## Main Principles
 
 {To be filled as the project develops — overarching philosophies for how code should be written. Process disciplines the team works by — TDD, review rituals, debugging practice — belong here too: they're project conventions, not global truths.}
