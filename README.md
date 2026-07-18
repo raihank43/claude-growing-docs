@@ -41,6 +41,35 @@ The core idea: the agent **decides** after every request — large or small — 
 
 Once that memory has grown, the agent can put it to work in both directions: challenge how existing intent is implemented, or **propose what to build next from gaps in your docs plus cited ecosystem research** — then turn a chosen idea into a decided design before building.
 
+## Commands at a glance
+
+| Command | Use it when… |
+|---------|--------------|
+| [`/project-init`](#project-init--new-project-from-scratch) | Starting a new project from an idea |
+| [`/project-adopt`](#project-adopt--existing-codebase) | Adding or upgrading growing-docs in an existing repo |
+| [`/scout`](#scout--propose-what-to-build-next) | Looking outward for genuinely new capabilities |
+| [`/rethink`](#rethink--challenge-the-project-and-propose-something-better) | Challenging how documented intent is implemented |
+| [`/forge`](#forge--interview-a-fuzzy-idea-into-a-decided-design) | Turning a fuzzy idea into a decided design |
+| [`/checkpoint`](#checkpoint--mid-session-save-and-sync) | Saving decisions and reconciling project memory |
+
+Together they form a loop: scaffold the memory, then put it to work —
+
+```mermaid
+flowchart LR
+    I["/project-init<br/>new project"] --> M["Project memory<br/>(CLAUDE.md + docs/)"]
+    A["/project-adopt<br/>existing repo"] --> M
+    M --> S["/scout<br/>diverge outward: what to build"]
+    M --> R["/rethink<br/>diverge inward: build it better"]
+    S --> F["/forge<br/>converge: decided design"]
+    R --> F
+    M -. "already-clear idea" .-> F
+    F --> B["build"]
+    B --> C["/checkpoint<br/>record"]
+    C --> M
+```
+
+The dotted shortcut is real: `/forge` doesn't require a scout or rethink proposal first — a backlog entry or your own fuzzy idea feeds it directly.
+
 ## Commands
 
 ### `/project-init` — new project from scratch
@@ -52,11 +81,11 @@ Run it from inside a repo. It can:
 - **Upgrade** a project already using growing-docs to the latest templates — without touching your filled-in content. (A version stamp in the scaffolded `CLAUDE.md` tells it exactly which template generation you're on, so up-to-date projects are detected instantly.)
 - **Consolidate a fat existing CLAUDE.md** — if a project crammed everything (architecture, gotchas, procedures) into one giant CLAUDE.md, adopt offers to move that knowledge into `docs/` and slim CLAUDE.md back to a lean workflow + index. Your choice (it can also just merge), and nothing is lost — content is relocated, then verified, before anything is removed.
 
-### `/rethink` — challenge the project and propose something better
-The divergent counterpart to `/forge`. Point it at your project (or a specific area) and it takes a fresh, critical look — reasoning from your *documented intent*, not just the code — and proposes ways to build it better: where an implementation under-serves its stated goal, where the architecture deserves a rethink, even where a previously-rejected idea is worth reopening because a new model changes the calculus. **Read-and-propose, never auto-refactor:** it writes a tiered, impact-ranked proposal doc and discusses it; accepted proposals graduate into the plan and hand off to `/forge`, rejected ones are logged so a future run treats them as settled. Its best moment is right after a sharper model lands — let it see what the last one couldn't.
-
 ### `/scout` — propose what to build next
 When the roadmap feels thin, point it at the whole product or a specific area. It reads your Vision, feature maturity, rejected ideas, and BACKLOG, then looks outward at the ecosystem and proposes genuinely new capabilities — not a reshuffle of ideas you already captured. Every external claim is cited or marked as an assumption; when research tools are unavailable, the run stays honestly hypothesis-only. It writes an evidence-ranked proposal with code-informed effort signals, checks the full doc corpus so old fences are not blindly re-proposed, and triages each result with you: pursue now into `/forge`, park in BACKLOG, durably reject with your reason, or discard weak evidence. **Read-and-propose, never scaffold or build.** Unlike asking "what's next?" — which reports the existing queue — scout generates new candidates.
+
+### `/rethink` — challenge the project and propose something better
+Scout's inward twin — where `/scout` proposes *what* to build next, `/rethink` challenges *how* the existing project is built. Point it at your project (or a specific area) and it takes a fresh, critical look — reasoning from your *documented intent*, not just the code — and proposes ways to build it better: where an implementation under-serves its stated goal, where the architecture deserves a rethink, even where a previously-rejected idea is worth reopening because a new model changes the calculus. **Read-and-propose, never auto-refactor:** it writes a tiered, impact-ranked proposal doc and discusses it; accepted proposals graduate into the plan and hand off to `/forge`, rejected ones are logged so a future run treats them as settled. Its best moment is right after a sharper model lands — let it see what the last one couldn't.
 
 ### `/forge` — interview a fuzzy idea into a decided design
 Before building a feature that's still vague — a one-line backlog entry, competing approaches, an open UX choice — run `/forge` (or accept it when offered). It's a relentless, one-question-at-a-time design interview: it reads your existing docs for context (cross-checking the new feature against what already exists and what you've already rejected), recommends an answer to every question, builds a throwaway HTML prototype for UI/UX choices — or runs a quick disposable code **spike** when the open question is empirical rather than a preference — and drives the design to a decision. The result lands in the feature doc as a **decided design with its rejected alternatives** (large designs also get a **build-phasing** plan: ordered, independently verifiable slices), committed — so when you build (even in a fresh chat), the *why* is already on disk. Produces a design, never product code.
@@ -66,9 +95,10 @@ Run it at a save point: a feature landed, you're taking a break, or the conversa
 
 It also audits the session for **documented rules that got violated (or nearly violated) anyway** — "twice bitten → teeth": instead of another prose re-edit, each hit gets a graduation offer — promote the rule (rewritten as an operation-shaped absolute) into CLAUDE.md's capped Invariants list, or give it an actual executable guard (a permissions deny rule or hook in *your* project's `.claude/`) when the operation is mechanically detectable.
 
-Also ships an on-demand deep mode, **`/checkpoint lint`** — a whole-tree consistency sweep (orphan feature docs, dead links, doc-vs-doc contradictions, stale markers, and always-read docs that have outgrown a single-pass read budget) that fixes the mechanical findings and surfaces the judgment calls. Run it occasionally as the doc tree grows; a normal checkpoint will point you to it when it trips over something.
+Two additional modes:
 
-For build-phase sessions where the conversation is the valuable thing to save but a full code walk would be premature, **`/checkpoint lite`** captures the conversation, violation audit, and Current Focus handoff while deferring code reconciliation. It leaves the full-checkpoint marker untouched, so the next full `/checkpoint` naturally sweeps everything since that baseline; after several consecutive lite saves it softly reminds you to run the full pass.
+- **`/checkpoint lint`** — an on-demand whole-tree consistency sweep (orphan feature docs, dead links, doc-vs-doc contradictions, stale markers, and always-read docs that have outgrown a single-pass read budget): mechanical findings fixed, judgment calls surfaced. Run it occasionally as the doc tree grows; a normal checkpoint will point you to it when it trips over something.
+- **`/checkpoint lite`** — for build-phase sessions where the conversation is the valuable thing to save but a full code walk would be premature: it captures the conversation, violation audit, and Current Focus handoff while deferring code reconciliation. The full-checkpoint marker stays untouched, so the next full `/checkpoint` naturally sweeps everything since that baseline; after several consecutive lite saves it softly reminds you to run the full pass.
 
 ## Install
 
@@ -77,7 +107,7 @@ For build-phase sessions where the conversation is the valuable thing to save bu
 /plugin install growing-docs
 ```
 
-Then `/project-init`, `/project-adopt`, `/scout`, `/forge`, `/rethink`, and `/checkpoint` are available in any conversation.
+All six commands are then available in any conversation.
 
 To update later, pull the newest version:
 ```
