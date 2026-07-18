@@ -66,7 +66,9 @@ Run it at a save point: a feature landed, you're taking a break, or the conversa
 
 It also audits the session for **documented rules that got violated (or nearly violated) anyway** — "twice bitten → teeth": instead of another prose re-edit, each hit gets a graduation offer — promote the rule (rewritten as an operation-shaped absolute) into CLAUDE.md's capped Invariants list, or give it an actual executable guard (a permissions deny rule or hook in *your* project's `.claude/`) when the operation is mechanically detectable.
 
-Also ships an on-demand deep mode, **`/checkpoint lint`** — a whole-tree consistency sweep (orphan feature docs, dead links, doc-vs-doc contradictions, stale markers) that fixes the mechanical findings and surfaces the judgment calls. Run it occasionally as the doc tree grows; a normal checkpoint will point you to it when it trips over something.
+Also ships an on-demand deep mode, **`/checkpoint lint`** — a whole-tree consistency sweep (orphan feature docs, dead links, doc-vs-doc contradictions, stale markers, and always-read docs that have outgrown a single-pass read budget) that fixes the mechanical findings and surfaces the judgment calls. Run it occasionally as the doc tree grows; a normal checkpoint will point you to it when it trips over something.
+
+For build-phase sessions where the conversation is the valuable thing to save but a full code walk would be premature, **`/checkpoint lite`** captures the conversation, violation audit, and Current Focus handoff while deferring code reconciliation. It leaves the full-checkpoint marker untouched, so the next full `/checkpoint` naturally sweeps everything since that baseline; after several consecutive lite saves it softly reminds you to run the full pass.
 
 ## Install
 

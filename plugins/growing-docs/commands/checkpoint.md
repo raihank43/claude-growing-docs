@@ -14,9 +14,17 @@ A deliberate doc-reconciliation sweep you invoke by hand. The per-change workflo
 
 This command reconciles docs but **never changes code**. If the repo has no `CLAUDE.md` / `docs/` (not a growing-docs project yet), tell the user to run `/project-adopt` first.
 
+## Mode dispatch — parse before doing any work
+
+Parse `$ARGUMENTS` **strictly** before reading project files:
+- Empty → run the full checkpoint: continue to the numbered steps below.
+- Exactly `lint` → run only **Lint mode**, then stop.
+- Exactly `lite` → run only **Lite mode**, then stop.
+- Anything else — including extra arguments or a typo such as `lnt` — is a usage error. Tell the user: `Usage: /checkpoint [lint|lite]`. **Do not silently fall back to a full checkpoint.**
+
 ## Lint mode — `/checkpoint lint` (on-demand whole-tree consistency sweep)
 
-If the invocation carries the argument `lint`, run THIS instead of the numbered steps below. Where a normal checkpoint reconciles what the diff and the conversation touched, lint mechanically walks the **whole doc tree** for consistency rot. Boundaries: template-*structure* drift is `/project-adopt` Upgrade's job; design *challenge* is `/rethink`'s — lint is consistency only.
+Where a full checkpoint reconciles what the diff and the conversation touched, lint mechanically walks the **whole doc tree** for consistency rot. Boundaries: template-*structure* drift is `/project-adopt` Upgrade's job; design *challenge* is `/rethink`'s — lint is consistency only. Lint complements the checkpoint system; it is **not** the path for reconciling code deferred by lite mode — a full checkpoint owns that.
 
 **The checks:**
 1. **Features table ↔ feature docs, both directions** — every `docs/feature-*.md` has a Features-table row (orphan docs); every row's Doc link resolves (dead rows).
@@ -24,10 +32,52 @@ If the invocation carries the argument `lint`, run THIS instead of the numbered 
 3. **Staleness outliers** — a `Last updated:` far behind recent git activity on that feature's files. **Flag these, don't refresh them** — bumping a marker without verifying the content is the unearned-verified-badge disease.
 4. **Bounded contradiction pass** — where the same claim lives in more than one doc (README ↔ ARCHITECTURE ↔ feature docs: versions, counts, behavior descriptions), check they agree. Resolve via the precedence rule (code → feature doc → ARCHITECTURE/PLAN → README); ask the user only when genuinely ambiguous.
 5. **Altitude check** — RULES entries that read as war stories (dated incident narrative, fix mechanics, multi-paragraph bodies) instead of rule + why + pointer (the file's entry-shape header). Judgment-surfaced, never auto-fixed: each hit becomes a demotion offer — move the story into the named feature doc's Gotchas, verify it landed, then compact the entry to rule + pointer (move → verify → remove; demotion is a delete, and uncaptured why is unrecoverable).
+6. **Always-read file budget** — flag any always-read doc (`CLAUDE.md`, `docs/RULES.md`, `docs/ARCHITECTURE.md`) whose total file size is no longer **readable in a single Read call — roughly tens of KB, not hundreds**, regardless of whether each entry has the right shape. Judgment-surfaced, never auto-fixed: suggest demoting full stories into the relevant feature docs and leaving compact conclusions + pointers; if demotion cannot restore the budget, suggest relocating/splitting detail behind an explicit retrieval path. Preserve knowledge via move → verify → remove.
 
-**Fix policy:** mechanical findings — a missing Features row, a dead link, a wrong count — **fix directly**. Judgment findings — a contradiction precedence can't settle, a doc describing intended behavior the code lost (don't paper over a bug), code diverging from a `Decided design` section (see step 2A's exception) — **surface to the user** instead.
+**Fix policy:** mechanical findings — a missing Features row, a dead link, a wrong count — **fix directly**. Judgment findings — a contradiction precedence can't settle, a doc describing intended behavior the code lost (don't paper over a bug), code diverging from a `Decided design` section (see step 2A's exception), an altitude hit, or an always-read file over budget — **surface to the user** instead.
 
 **Report & persist:** append a lint entry to `docs/CHECKPOINTS.md` (`## <date> — <sha> — lint: N checked, M fixed, K surfaced`), then privacy-check + commit the fixes like a normal checkpoint (docs-only, project's convention). **Do NOT move the `Last checkpoint:` marker** — lint reconciles neither the diff nor the conversation, so moving it would falsely claim a full checkpoint happened.
+
+## Lite mode — `/checkpoint lite` (conversation-only save point)
+
+Run only the lite flow in this section, then stop. **Do not continue into Step 1 or Step 2A below.** Lite captures the live conversation and handoff cheaply while deliberately deferring all code reconciliation to the next full checkpoint. It is usable in any project phase — optimized for build-phase cadence, not gated to it.
+
+**Lite 1 — Establish state, not code scope:**
+- Read `docs/PLAN.md`, including Current Focus and the bare `Last checkpoint: <sha>` marker value. That marker is the last **full** reconciliation baseline.
+- Read `git rev-parse --short HEAD`, `git status`, and only the recent `docs/CHECKPOINTS.md` headings needed for the counter below. **Do not run `git diff`, test marker ancestry, rebaseline, or inspect changed code.**
+- Count `lite:` headings after the latest full entry, ignoring any intervening `lint:` headings. Because entries are newest-first, scan from the top: skip `lint:`, count `lite:`, and stop at the first heading that is neither `lite:` nor `lint:`. Include the entry this run will write in the reported count.
+
+**Lite 2 — Sweep the conversation, at full breadth:**
+- Perform the conversation capture from Step 2B: route decisions to PLAN, gotchas to the relevant feature doc, rejected ideas to PLAN, un-triaged future-work ideas to BACKLOG, conventions/anti-patterns/domain terms to RULES, and user-visible changes to README. Use the BACKLOG stub and canonicity rule from Step 2B if the file does not exist. Knowledge belongs in its native docs; the lite log entry holds pointers, not duplicate prose.
+- Perform the session-scoped violation audit from Step 2C. Every hit still requires one of all four graduation outcomes — promote to Invariants, reshape the RULES entry operation-shaped, add a user-approved project-local `.claude/` guard, or leave as-is with a recorded reason — and the outcome lands in the report. No diff is needed for this audit.
+- Keep the intent-of-record and don't-paper-over-a-bug rules as **incidental fences only**: if the conversation sweep naturally exposes a contradiction, surface it; never hunt for one or begin a code walk.
+- Refresh `Last updated:` markers on touched docs only. Offer legacy cleanup only if the legacy shape is naturally encountered.
+
+**Lite 3 — Write the budgeted log entry and full handoff brief:**
+- Always add a `lite:` entry at the top of `docs/CHECKPOINTS.md`, even when the sweep found nothing new. Aim for the fixed ~4-bullet shape below. This is a **budget, never a data-loss rule**: violation outcomes or unique evidence may overflow it, but route durable detail to native docs and keep pointers here.
+
+```
+## <YYYY-MM-DD> — <short sha> — lite: <one-line title>
+- **Captured:** <conversation knowledge routed, with native-doc pointers; or "nothing new from conversation">
+- **Violation audit:** <clean, or each hit + chosen graduation outcome>
+- **Handoff:** <the Current Focus brief written, with its key pointer>
+- **Deferred:** code reconciliation deferred; full baseline remains `<sha>`; lite run `<N>` since the last full checkpoint
+```
+
+- Write Current Focus using Step 4B's **full brief shape**: Just shipped / In flight / Next / Start here, with Next's provenance tag and queue tail. A lite run's full-checkpoint recommendation must **never** displace Current Focus's Next.
+- From the **3rd consecutive lite run onward**, softly recommend a full `/checkpoint` in the chat report. Never block the lite run.
+- If `docs/CHECKPOINTS.md` does not exist, create it with the stub in Step 4A, including its full-vs-lite budget line.
+
+**Lite 4 — Privacy-check and save only what lite authored:**
+- Apply Step 5's privacy guard to every file lite will save **and to the proposed commit message**. Follow the project's own Git Convention / mandated release path.
+- Commit only files this lite run wrote, plus any user-approved project-local `.claude/` guard from the violation audit. Leave all pre-existing uncommitted code and other uninspected files untouched, and **name them in the report**: lite does not commit what it did not inspect. If a mandated release script cannot stage partially, surface the conflict and ask instead of broadening the commit.
+- Message: `docs: checkpoint lite — capture conversation + handoff (<one-line summary>)`.
+- **Do not update the `Last checkpoint:` marker.** It remains the last-full baseline so the next full checkpoint sweeps `<baseline>..HEAD`. This also overrides Step 5's local-only-docs clause: lite does not update a local marker either. If dev docs are gitignored/local-only, leave the authored updates on disk and commit only other tracked files lite authored, if any.
+
+**Lite 5 — Report honestly:**
+- Report what conversation knowledge was captured, the violation-audit outcomes, the Current Focus brief, the lite entry, and the resulting docs commit (or why no commit occurred).
+- Name any uncommitted code or other files left alone. Do not claim what was in sync; lite did not assess it.
+- Use this freshness claim: **"Conversation-only knowledge and the handoff are captured; code reconciliation is deferred. The full baseline remains `<sha>`; the next full checkpoint sweeps the queued range."** Never use the full checkpoint's "everything important is in the docs" assurance.
 
 ## 1. Establish scope — what's happened since the last checkpoint
 - Read `docs/PLAN.md`. If it has a `Last checkpoint: <sha>` line, **first confirm that SHA is still in the branch** (`git merge-base --is-ancestor <sha> HEAD`). If it is, scope = `git diff <sha>..HEAD` + uncommitted changes. If it is **not** an ancestor (history was rewritten / force-pushed since the last checkpoint, so the baseline is orphaned), or there's no marker at all, treat this as a first checkpoint and rebaseline: scope = recent history (`git log --oneline -20`) + the working tree.
@@ -93,7 +143,8 @@ File stub (first use):
 ```
 # Checkpoint Log
 Full session reports from `/checkpoint`, newest first. The cold-start brief lives in
-PLAN.md's Current Focus; this file is the uncapped history behind it.
+PLAN.md's Current Focus; this file is the history behind it. Full entries are uncapped;
+`lite:` entries are budgeted summaries whose durable detail lives in native docs.
 ```
 
 **B. The cold-start brief → the Current Focus section in `docs/PLAN.md`** (add the section if missing). A tight distillate — **~15–30 lines** — so a fresh session resumes *without re-reading everything*:
