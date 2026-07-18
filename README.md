@@ -2,7 +2,7 @@
 
 > Project memory for agentic development — docs that scaffold themselves, grow with your codebase, and become a substrate the agent puts to work building a better project.
 
-A Claude Code plugin with five slash commands for projects you build *with* an AI agent. It sets up a documentation system the agent maintains automatically — durable, repo-versioned project memory, so no single conversation is ever load-bearing. End a session, compact it, start a fresh one, or hand off to a subagent or a teammate: the knowledge is already written down where the next reader picks it up.
+A Claude Code plugin with six slash commands for projects you build *with* an AI agent. It sets up a documentation system the agent maintains automatically — durable, repo-versioned project memory, so no single conversation is ever load-bearing. End a session, compact it, start a fresh one, or hand off to a subagent or a teammate: the knowledge is already written down where the next reader picks it up.
 
 ## The problem it solves
 
@@ -39,6 +39,8 @@ Recording the dead ends is the difference between docs that *describe* the proje
 
 The core idea: the agent **decides** after every request — large or small — which of these docs need updating, and keeps them in sync with the code. Code is always the source of truth; stale docs get fixed.
 
+Once that memory has grown, the agent can put it to work in both directions: challenge how existing intent is implemented, or **propose what to build next from gaps in your docs plus cited ecosystem research** — then turn a chosen idea into a decided design before building.
+
 ## Commands
 
 ### `/project-init` — new project from scratch
@@ -52,6 +54,9 @@ Run it from inside a repo. It can:
 
 ### `/rethink` — challenge the project and propose something better
 The divergent counterpart to `/forge`. Point it at your project (or a specific area) and it takes a fresh, critical look — reasoning from your *documented intent*, not just the code — and proposes ways to build it better: where an implementation under-serves its stated goal, where the architecture deserves a rethink, even where a previously-rejected idea is worth reopening because a new model changes the calculus. **Read-and-propose, never auto-refactor:** it writes a tiered, impact-ranked proposal doc and discusses it; accepted proposals graduate into the plan and hand off to `/forge`, rejected ones are logged so a future run treats them as settled. Its best moment is right after a sharper model lands — let it see what the last one couldn't.
+
+### `/scout` — propose what to build next
+When the roadmap feels thin, point it at the whole product or a specific area. It reads your Vision, feature maturity, rejected ideas, and BACKLOG, then looks outward at the ecosystem and proposes genuinely new capabilities — not a reshuffle of ideas you already captured. Every external claim is cited or marked as an assumption; when research tools are unavailable, the run stays honestly hypothesis-only. It writes an evidence-ranked proposal with code-informed effort signals, checks the full doc corpus so old fences are not blindly re-proposed, and triages each result with you: pursue now into `/forge`, park in BACKLOG, durably reject with your reason, or discard weak evidence. **Read-and-propose, never scaffold or build.** Unlike asking "what's next?" — which reports the existing queue — scout generates new candidates.
 
 ### `/forge` — interview a fuzzy idea into a decided design
 Before building a feature that's still vague — a one-line backlog entry, competing approaches, an open UX choice — run `/forge` (or accept it when offered). It's a relentless, one-question-at-a-time design interview: it reads your existing docs for context (cross-checking the new feature against what already exists and what you've already rejected), recommends an answer to every question, builds a throwaway HTML prototype for UI/UX choices — or runs a quick disposable code **spike** when the open question is empirical rather than a preference — and drives the design to a decision. The result lands in the feature doc as a **decided design with its rejected alternatives** (large designs also get a **build-phasing** plan: ordered, independently verifiable slices), committed — so when you build (even in a fresh chat), the *why* is already on disk. Produces a design, never product code.
@@ -70,7 +75,7 @@ Also ships an on-demand deep mode, **`/checkpoint lint`** — a whole-tree consi
 /plugin install growing-docs
 ```
 
-Then `/project-init`, `/project-adopt`, `/forge`, `/rethink`, and `/checkpoint` are available in any conversation.
+Then `/project-init`, `/project-adopt`, `/scout`, `/forge`, `/rethink`, and `/checkpoint` are available in any conversation.
 
 To update later, pull the newest version:
 ```

@@ -42,6 +42,8 @@ Produce the proposals. Each one is:
 
 Guard against over-eagerness: **don't import generic best-practices that ignore the project's deliberate choices** — the docs exist precisely to record those deviations. Approach undocumented "improvements" with humility.
 
+**Scout boundary:** if a find introduces a new capability absent from both the Features table and BACKLOG (rather than improving how an existing capability is achieved), record a one-line `/scout` hand-off pointer in the proposal file instead of developing or dropping it.
+
 Write them to `docs/proposals/<YYYY-MM-DD>-rethink.md` (create `docs/proposals/` if absent; if that file already exists — a second run the same day — use a numbered suffix: `<YYYY-MM-DD>-rethink-2.md`). Then **present the tiered list and discuss** — this is a conversation, not a verdict.
 
 ## Phase 4 — Triage, graduate & persist
